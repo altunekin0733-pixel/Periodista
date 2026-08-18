@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Periodista — Kategori</title>
+<link rel="stylesheet" href="assets/colors_and_type.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0b1326; }
+  a { color: var(--vd-primary-strong); text-decoration: none; }
+  a:hover { color: var(--vd-primary); }
+  @keyframes vd-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .vd-ticker::-webkit-scrollbar { display: none; }
+  .vd-ticker { scrollbar-width: none; }
+</style>
+</helmet>
+<div style="background:{{ theme.bg }};min-height:100vh;transition:background 200ms ease;">
+  <div style="background:{{ theme.chromeBgSolid }};border-bottom:1px solid {{ theme.outlineVariant }};overflow:hidden;padding:6px 0;">
+    <div style="display:flex;align-items:center;gap:32px;width:max-content;animation:vd-marquee 40s linear infinite;">
+      <sc-for list="{{ rates }}" as="r" hint-placeholder-count="8">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;padding-left:24px;">
+          <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:{{ theme.fgVariant }};">{{ r.label }}</span>
+          <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:700;color:{{ theme.fg }};font-variant-numeric:tabular-nums;">{{ r.value }}</span>
+          <span class="material-symbols-outlined" style="font-size:14px;color:{{ r.color }};">{{ r.icon }}</span>
+        </div>
+      </sc-for>
+      <sc-for list="{{ rates }}" as="r2" hint-placeholder-count="8">
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;padding-left:24px;">
+          <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:{{ theme.fgVariant }};">{{ r2.label }}</span>
+          <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:700;color:{{ theme.fg }};font-variant-numeric:tabular-nums;">{{ r2.value }}</span>
+          <span class="material-symbols-outlined" style="font-size:14px;color:{{ r2.color }};">{{ r2.icon }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="position:sticky;top:0;z-index:20;min-height:72px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:12px 24px;background:{{ theme.chromeBgTranslucent }};backdrop-filter:blur(8px);border-bottom:1px solid {{ theme.outlineVariant }};">
+    <a href="Periodista Home.dc.html" style="display:flex;align-items:center;">
+      <sc-if value="{{ isSpor }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ isDarkTheme }}" hint-placeholder-val="{{ true }}">
+          <img src="assets/logo-sports-white.png" alt="Periodista Sports" style="height:44px;width:auto;display:block;" />
+        </sc-if>
+        <sc-if value="{{ isLightTheme }}" hint-placeholder-val="{{ false }}">
+          <img src="assets/logo-sports-black.png" alt="Periodista Sports" style="height:44px;width:auto;display:block;" />
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{ isNotSpor }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ isDarkTheme }}" hint-placeholder-val="{{ true }}">
+          <img src="assets/logo-white.png" alt="Periodista" style="height:42px;width:auto;display:block;" />
+        </sc-if>
+        <sc-if value="{{ isLightTheme }}" hint-placeholder-val="{{ false }}">
+          <img src="assets/logo-black.png" alt="Periodista" style="height:42px;width:auto;display:block;" />
+        </sc-if>
+      </sc-if>
+    </a>
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="8">
+        <a href="{{ cat.href }}" style="font-size:13px;font-weight:600;letter-spacing:0.04em;color:{{ theme.fgVariant }};text-transform:uppercase;">{{ cat.name }}</a>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <button onClick="{{ toggleTheme }}" title="Tema değiştir" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9999px;border:1px solid {{ theme.outlineVariant }};color:{{ theme.fgMuted }};background:none;cursor:pointer;">
+        <span class="material-symbols-outlined" style="font-size:18px;">{{ themeIcon }}</span>
+      </button>
+      <a href="Periodista Admin.dc.html" title="Yönetim Paneli" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9999px;border:1px solid {{ theme.outlineVariant }};color:{{ theme.fgMuted }};">
+        <span class="material-symbols-outlined" style="font-size:18px;">admin_panel_settings</span>
+      </a>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,{{ theme.surfaceContainerHigh }},{{ theme.surfaceContainer }});border-bottom:1px solid {{ theme.outlineVariant }};">
+    <div style="max-width:1100px;margin:0 auto;padding:40px 24px 32px;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h1 style="font-family:Inter,sans-serif;font-size:32px;font-weight:700;letter-spacing:-0.02em;color:{{ theme.fg }};margin:0 0 4px;">{{ categoryName }}</h1>
+          <p style="font-family:Inter,sans-serif;font-size:14px;color:{{ theme.fgVariant }};margin:0;">{{ categoryDesc }}</p>
+        </div>
+        <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};flex-shrink:0;">{{ countLabel }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1100px;margin:0 auto;padding:40px 24px 80px;">
+    <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <sc-if value="{{ hasLead }}" hint-placeholder-val="{{ true }}">
+          <a href="{{ lead.href }}" style="display:grid;grid-template-columns:1.2fr 1fr;gap:32px;margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid {{ theme.outlineVariant }};">
+            <div style="height:280px;border-radius:8px;background:linear-gradient(135deg,{{ theme.surfaceContainerHigh }},{{ theme.surfaceVariant }});"></div>
+            <div style="display:flex;flex-direction:column;justify-content:center;gap:12px;">
+              <h2 style="font-family:Inter,sans-serif;font-size:26px;font-weight:700;line-height:1.25;letter-spacing:-0.01em;color:{{ theme.fg }};margin:0;">{{ lead.title }}</h2>
+              <p style="font-family:Inter,sans-serif;font-size:15px;line-height:1.6;color:{{ theme.fgVariant }};margin:0;">{{ lead.dek }}</p>
+              <div style="display:flex;gap:8px;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:{{ theme.fgMuted }};font-variant-numeric:tabular-nums;">
+                <span>{{ lead.author }}</span><span>·</span><span>{{ lead.dateLabel }}</span><span>·</span><span>{{ lead.readLabel }}</span>
+              </div>
+            </div>
+          </a>
+        </sc-if>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
+          <sc-for list="{{ rest }}" as="item" hint-placeholder-count="4">
+            <a href="{{ item.href }}" style="display:flex;flex-direction:column;gap:12px;background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:16px;">
+              <div style="height:150px;border-radius:4px;background:linear-gradient(135deg,{{ theme.surfaceContainerHigh }},{{ theme.surfaceVariant }});"></div>
+              <h3 style="font-family:Inter,sans-serif;font-size:17px;font-weight:600;line-height:1.35;color:{{ theme.fg }};margin:0;">{{ item.title }}</h3>
+              <p style="font-family:Inter,sans-serif;font-size:14px;line-height:1.5;color:{{ theme.fgVariant }};margin:0;">{{ item.dek }}</p>
+              <div style="display:flex;gap:8px;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:{{ theme.fgMuted }};font-variant-numeric:tabular-nums;">
+                <span>{{ item.author }}</span><span>·</span><span>{{ item.dateLabel }}</span><span>·</span><span>{{ item.readLabel }}</span>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="border-top:1px solid {{ theme.outlineVariant }};background:{{ theme.chromeBgSolid }};padding:48px 24px;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px;">
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px;max-width:320px;">
+        <sc-if value="{{ isDarkTheme }}" hint-placeholder-val="{{ true }}">
+          <img src="assets/logo-white.png" alt="Periodista" style="height:32px;width:auto;align-self:flex-start;" />
+        </sc-if>
+        <sc-if value="{{ isLightTheme }}" hint-placeholder-val="{{ false }}">
+          <img src="assets/logo-black.png" alt="Periodista" style="height:32px;width:auto;align-self:flex-start;" />
+        </sc-if>
+        <p style="font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgMuted }};margin:0;">Günün öne çıkan gelişmeleri, tek yerde.</p>
+        <div style="display:flex;gap:10px;">
+          <sc-for list="{{ socials }}" as="s" hint-placeholder-count="4">
+            <a href="{{ s.url }}" target="_blank" title="{{ s.name }}" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9999px;border:1px solid {{ theme.outlineVariant }};color:{{ theme.fgVariant }};">
+              <span class="material-symbols-outlined" style="font-size:18px;">{{ s.icon }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};">Kategoriler</span>
+        <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="8">
+          <a href="{{ cat.href }}" style="font-size:13px;color:{{ theme.fgVariant }};">{{ cat.name }}</a>
+        </sc-for>
+      </div>
+    </div>
+    <div style="max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid {{ theme.outlineVariant }};display:flex;justify-content:space-between;font-family:Inter,sans-serif;font-size:12px;color:{{ theme.fgMuted }};">
+      <span>© 2026 Periodista</span>
+      <a href="Periodista Admin.dc.html" style="color:{{ theme.fgMuted }};">Yönetim Paneli</a>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RATES = [
+  { label: 'USD/TRY', value: '34,82', dir: 'up' },
+  { label: 'EUR/TRY', value: '37,15', dir: 'down' },
+  { label: 'GBP/TRY', value: '43,60', dir: 'up' },
+  { label: 'CHF/TRY', value: '38,94', dir: 'up' },
+  { label: 'JPY/TRY', value: '0,2312', dir: 'down' },
+  { label: 'Gram Altın', value: '3.128', dir: 'up' },
+  { label: 'Çeyrek Altın', value: '5.104', dir: 'up' },
+  { label: 'BIST 100', value: '9.845,32', dir: 'down' },
+];
+const SOCIAL_ICONS = { instagram: 'photo_camera', x: 'close', tiktok: 'music_note', telegram: 'send' };
+const SOCIAL_NAMES = { instagram: 'Instagram', x: 'X', tiktok: 'TikTok', telegram: 'Telegram' };
+const DARK = {
+  bg: '#0b1326', surfaceContainer: '#171f33', surfaceContainerHigh: '#222a3d', surfaceContainerLow: '#131b2e',
+  surfaceVariant: '#2d3449', fg: '#dae2fd', fgVariant: '#c2c6d6', fgMuted: '#8c909f', outlineVariant: '#424754',
+  chromeBgSolid: '#020617', chromeBgTranslucent: 'rgba(2,6,23,0.8)',
+};
+const LIGHT = {
+  bg: '#f3f5f9', surfaceContainer: '#ffffff', surfaceContainerHigh: '#eef1f7', surfaceContainerLow: '#f8f9fb',
+  surfaceVariant: '#e3e7ee', fg: '#11131a', fgVariant: '#454a5c', fgMuted: '#6b7080', outlineVariant: '#dde1e8',
+  chromeBgSolid: '#ffffff', chromeBgTranslucent: 'rgba(255,255,255,0.85)',
+};
+
+class Component extends DCLogic {
+  state = { articles: [], slug: null, theme: (typeof localStorage !== 'undefined' && localStorage.getItem('periodista_theme')) || 'dark' };
+
+  async componentDidMount() {
+    const store = await import('./store.js');
+    this.store = store;
+    const params = new URLSearchParams(window.location.search);
+    const cats = store.getCategories();
+    const slug = params.get('cat') || (cats[0] || {}).slug;
+    this.setState({ articles: store.getByCategory(slug), slug });
+  }
+
+  toggleTheme = () => {
+    const next = this.state.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('periodista_theme', next); } catch (e) {}
+    this.setState({ theme: next });
+  };
+
+  fmtDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  renderVals() {
+    const theme = this.state.theme === 'dark' ? DARK : LIGHT;
+    const CATS = this.store ? this.store.getCategories() : [];
+    const categories = CATS.map(c => ({ ...c, href: `Periodista Kategori.dc.html?cat=${c.slug}` }));
+    const current = CATS.find(c => c.slug === this.state.slug);
+    const items = this.state.articles.map(a => ({
+      ...a,
+      href: `Periodista Haber.dc.html?id=${a.id}`,
+      dateLabel: this.fmtDate(a.publishedAt),
+      readLabel: `${a.readMins} dk okuma`,
+    }));
+    const lead = items[0] || null;
+    const rest = items.slice(1);
+    return {
+      theme,
+      themeIcon: this.state.theme === 'dark' ? 'light_mode' : 'dark_mode',
+      toggleTheme: this.toggleTheme,
+      isDarkTheme: this.state.theme === 'dark',
+      isLightTheme: this.state.theme !== 'dark',
+      categories,
+      categoryName: current ? current.name : '',
+      categoryIcon: current ? current.icon : 'newspaper',
+      categoryDesc: current ? current.desc : '',
+      isSpor: this.state.slug === 'spor',
+      isNotSpor: this.state.slug !== 'spor',
+      countLabel: `${items.length} haber`,
+      items,
+      hasItems: items.length > 0,
+      lead,
+      hasLead: !!lead,
+      rest,
+      rates: RATES.map(r => ({ ...r, color: r.dir === 'up' ? '#34d399' : '#ff5a52', icon: r.dir === 'up' ? 'arrow_upward' : 'arrow_downward' })),
+      socials: (() => {
+        const links = this.store ? this.store.getSocialLinks() : {};
+        return Object.keys(links).filter(k => links[k]).map(k => ({ name: SOCIAL_NAMES[k] || k, icon: SOCIAL_ICONS[k] || 'link', url: links[k] }));
+      })(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

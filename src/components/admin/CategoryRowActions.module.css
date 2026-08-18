@@ -1,0 +1,30 @@
+.wrapper {
+  position: relative;
+}
+
+.movePanel {
+  position: absolute;
+  z-index: 5;
+  inset-inline-end: 0;
+  top: calc(100% + 0.35rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 16rem;
+  padding: 0.7rem;
+  background: var(--surface);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  text-align: start;
+}
+
+.moveRow {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.moveRow :global(.admin-select) {
+  flex: 1;
+  min-width: 0;
+}

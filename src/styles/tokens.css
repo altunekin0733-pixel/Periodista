@@ -1,0 +1,131 @@
+/* =============================================================
+   Periodista — tasarım token'ları
+   Koyu tema varsayılan; açık tema [data-theme="light"] ile açılır.
+   ============================================================= */
+
+:root {
+  /* ---------- yüzeyler ---------- */
+  --bg: #0b1326;
+  --surface: #131b2e;
+  --surface-raised: #171f33;
+  --surface-high: #222a3d;
+  --surface-variant: #2d3449;
+  --chrome: #020617;
+  --chrome-translucent: rgba(2, 6, 23, 0.82);
+
+  /* ---------- metin ---------- */
+  --fg: #dae2fd;
+  --fg-variant: #c2c6d6;
+  --fg-muted: #8c909f;
+
+  /* ---------- çizgiler ---------- */
+  --outline: #424754;
+  --outline-faint: #2d3449;
+
+  /* ---------- vurgu ---------- */
+  --primary: #4d8eff;
+  --primary-hover: #7aabff;
+  --primary-soft: rgba(77, 142, 255, 0.12);
+  --primary-ring: rgba(77, 142, 255, 0.45);
+  --on-primary: #ffffff;
+
+  /* ---------- anlamsal ---------- */
+  --breaking: #ff5a52;
+  --breaking-soft: rgba(255, 90, 82, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #ff5a52;
+  --danger-soft: rgba(255, 90, 82, 0.12);
+
+  --skeleton: linear-gradient(135deg, var(--surface-high), var(--surface-variant));
+
+  /* ---------- tipografi ---------- */
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --text-hero: clamp(1.75rem, 1.1rem + 2.6vw, 3rem);
+  --text-title: clamp(1.375rem, 1.1rem + 1.2vw, 1.875rem);
+  --text-lead: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-body: 1.0625rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+  --text-caps: 0.6875rem;
+
+  --tracking-tight: -0.022em;
+  --tracking-caps: 0.09em;
+
+  /* ---------- aralık ---------- */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-section: clamp(2.5rem, 2rem + 2.4vw, 4rem);
+
+  --content-width: 1200px;
+  --reading-width: 44rem;
+  --header-height: 4.5rem;
+
+  /* ---------- köşe ---------- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* ---------- gölge ---------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.65);
+
+  /* ---------- hareket ---------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 130ms;
+  --dur: 220ms;
+  --dur-slow: 380ms;
+
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --bg: #f3f5f9;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-high: #eef1f7;
+  --surface-variant: #e3e7ee;
+  --chrome: #ffffff;
+  --chrome-translucent: rgba(255, 255, 255, 0.88);
+
+  --fg: #11131a;
+  --fg-variant: #454a5c;
+  --fg-muted: #6b7080;
+
+  --outline: #dde1e8;
+  --outline-faint: #e8ebf1;
+
+  --primary: #1c5fd6;
+  --primary-hover: #14459e;
+  --primary-soft: rgba(28, 95, 214, 0.09);
+  --primary-ring: rgba(28, 95, 214, 0.4);
+  --on-primary: #ffffff;
+
+  --breaking: #d92d24;
+  --breaking-soft: rgba(217, 45, 36, 0.09);
+  --success: #0f7a52;
+  --success-soft: rgba(15, 122, 82, 0.1);
+  --warning: #9a6700;
+  --warning-soft: rgba(154, 103, 0, 0.1);
+  --danger: #c62b22;
+  --danger-soft: rgba(198, 43, 34, 0.09);
+
+  --skeleton: linear-gradient(135deg, var(--surface-high), var(--surface-variant));
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 8px 24px -10px rgba(16, 24, 40, 0.18);
+  --shadow-lg: 0 24px 48px -16px rgba(16, 24, 40, 0.22);
+
+  color-scheme: light;
+}

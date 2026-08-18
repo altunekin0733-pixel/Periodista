@@ -1,0 +1,63 @@
+.section {
+  margin-bottom: var(--space-section);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-bottom: 0.625rem;
+  margin-bottom: var(--space-md);
+  border-bottom: 2px solid var(--outline-faint);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+  transition: gap var(--dur-fast) var(--ease-out);
+}
+
+.more:hover {
+  gap: 0.55rem;
+  color: var(--primary-hover);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+}
+
+/* Öne çıkan haber tam genişlik kalır, diğerleri altında ikili/üçlü akar. */
+@media (min-width: 40rem) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lead {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

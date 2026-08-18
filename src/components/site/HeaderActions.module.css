@@ -1,0 +1,146 @@
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--fg-muted);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.iconButton:hover {
+  color: var(--fg);
+  border-color: var(--fg-muted);
+  background: var(--surface-high);
+}
+
+.iconButton:active {
+  transform: scale(0.94);
+}
+
+/* ---------- arama ---------- */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.searchInput {
+  width: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: var(--surface-high);
+  font-size: var(--text-sm);
+  opacity: 0;
+  transition:
+    width var(--dur) var(--ease-out),
+    padding var(--dur) var(--ease-out),
+    opacity var(--dur) var(--ease-out);
+}
+
+.searchOpen .searchInput {
+  width: clamp(9rem, 22vw, 15rem);
+  padding: 0.4rem 0.875rem;
+  border-color: var(--outline);
+  opacity: 1;
+}
+
+.searchInput::-webkit-search-cancel-button {
+  filter: grayscale(1);
+}
+
+/* ---------- mobil menü ---------- */
+
+.menuButton {
+  display: inline-flex;
+}
+
+@media (min-width: 64rem) {
+  .menuButton {
+    display: none;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(2px);
+  animation: fade-in var(--dur) var(--ease-out);
+}
+
+.drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 41;
+  width: min(20rem, 82vw);
+  padding: var(--space-lg) var(--space-md);
+  padding-top: calc(var(--header-height) + var(--space-md));
+  background: var(--surface);
+  border-inline-start: 1px solid var(--outline);
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+  animation: slide-in var(--dur) var(--ease-out);
+}
+
+.drawerList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin-top: var(--space-sm);
+}
+
+.drawerLink {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--fg-variant);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.drawerLink:hover,
+.drawerLink:focus-visible {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

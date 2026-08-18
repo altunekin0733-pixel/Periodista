@@ -1,0 +1,22 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.image {
+  width: auto;
+  height: auto;
+  max-height: 100%;
+  /* Koyu tema varsayılan olduğu için siyah logo beyaza çevrilir. */
+  filter: invert(1);
+  transition: filter var(--dur) var(--ease-out);
+}
+
+[data-theme='light'] .image {
+  filter: none;
+}
+
+.wrapper:hover .image {
+  opacity: 0.85;
+}

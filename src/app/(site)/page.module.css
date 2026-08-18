@@ -1,0 +1,64 @@
+.hero {
+  display: grid;
+  gap: var(--space-md);
+  padding-block: var(--space-lg) var(--space-section);
+}
+
+/* Manşet ile son dakika paneli geniş ekranda yan yana, dar ekranda alt alta. */
+@media (min-width: 64rem) {
+  .hero {
+    grid-template-columns: 1.65fr 1fr;
+    align-items: stretch;
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-2xl) var(--space-md);
+  margin-block: var(--space-2xl);
+  text-align: center;
+  border: 1px dashed var(--outline);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.emptyTitle {
+  font-size: var(--text-title);
+}
+
+.emptyText {
+  max-width: 42ch;
+  color: var(--fg-muted);
+}
+
+.emptyAction {
+  margin-top: var(--space-xs);
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.emptyAction:hover {
+  background: var(--primary-hover);
+}
+
+.emptyCode {
+  width: 100%;
+  max-width: 28rem;
+  margin-block: var(--space-xs);
+  padding: var(--space-md);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-high);
+  text-align: start;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  overflow-x: auto;
+}

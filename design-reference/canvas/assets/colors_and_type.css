@@ -1,0 +1,242 @@
+/* =============================================================
+   VisionDock — colors & type tokens
+   Industrial Precision · dark-first · Inter / JetBrains Mono
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* ---------- COLORS — surface (M3 dark tonal stack) ---------- */
+  --vd-bg:                       #0b1326;  /* application canvas */
+  --vd-surface:                  #0b1326;
+  --vd-surface-dim:              #0b1326;
+  --vd-surface-bright:           #31394d;
+  --vd-surface-container-lowest: #060e20;
+  --vd-surface-container-low:    #131b2e;
+  --vd-surface-container:        #171f33;  /* default card surface */
+  --vd-surface-container-high:   #222a3d;  /* card header / hover */
+  --vd-surface-container-highest:#2d3449;
+  --vd-surface-variant:          #2d3449;
+
+  /* ---------- COLORS — foreground / outline ---------- */
+  --vd-fg:                       #dae2fd;  /* on-surface, body */
+  --vd-fg-variant:               #c2c6d6;  /* on-surface-variant */
+  --vd-fg-muted:                 #8c909f;  /* outline / labels */
+  --vd-outline:                  #8c909f;
+  --vd-outline-variant:          #424754;  /* card borders */
+  --vd-outline-faint:            #2d3449;
+
+  /* ---------- COLORS — primary (vibrant industrial blue) ---------- */
+  --vd-primary:                  #adc6ff;  /* foreground / accent on dark */
+  --vd-primary-strong:           #4d8eff;  /* button fills, focus */
+  --vd-primary-deep:             #005ac2;
+  --vd-on-primary:               #002e6a;
+  --vd-primary-container:        #4d8eff;
+  --vd-on-primary-container:     #00285d;
+  --vd-primary-fixed:            #d8e2ff;
+  --vd-primary-fixed-dim:        #adc6ff;
+
+  /* ---------- COLORS — secondary / tertiary ---------- */
+  --vd-secondary:                #b7c8e1;
+  --vd-on-secondary:             #213145;
+  --vd-secondary-container:      #3a4a5f;
+
+  --vd-tertiary:                 #89ceff;  /* tech-blue accent (sync, info) */
+  --vd-tertiary-container:       #009ada;
+  --vd-on-tertiary:              #00344d;
+  --vd-tertiary-fixed:           #c9e6ff;
+
+  /* ---------- COLORS — semantic (industrial-standard) ---------- */
+  --vd-success:        #34d399;  /* nominal / pass / online — emerald */
+  --vd-success-bg:     rgba(52, 211, 153, 0.12);
+  --vd-success-border: rgba(52, 211, 153, 0.35);
+
+  --vd-warning:        #fbbf24;  /* warning — warm amber */
+  --vd-warning-bg:     rgba(251, 191, 36, 0.12);
+  --vd-warning-border: rgba(251, 191, 36, 0.35);
+
+  --vd-error:          #ffb4ab;  /* M3 dark error fg */
+  --vd-error-strong:   #ff5a52;  /* high-contrast critical */
+  --vd-error-container:#93000a;
+  --vd-on-error:       #690005;
+  --vd-on-error-container:#ffdad6;
+  --vd-error-bg:       rgba(255, 90, 82, 0.12);
+  --vd-error-border:   rgba(147, 0, 10, 0.5);
+
+  --vd-info:           #89ceff;
+  --vd-info-bg:        rgba(137, 206, 255, 0.10);
+
+  /* ---------- COLORS — slate scale used in chrome (tailwind-aligned) ---------- */
+  --vd-slate-950: #020617;  /* topbar */
+  --vd-slate-900: #0f172a;  /* sidebar */
+  --vd-slate-800: #1e293b;  /* dividers */
+  --vd-slate-700: #334155;
+  --vd-slate-600: #475569;
+  --vd-slate-500: #64748b;
+  --vd-slate-400: #94a3b8;  /* nav text inactive */
+  --vd-slate-300: #cbd5e1;
+  --vd-slate-200: #e2e8f0;
+
+  /* ---------- TYPE — families ---------- */
+  --vd-font-sans:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --vd-font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --vd-font-display: "Inter", sans-serif;
+
+  /* ---------- TYPE — semantic scales (Industrial Precision spec) ---------- */
+  --vd-headline-xl-size:   32px;
+  --vd-headline-xl-weight: 700;
+  --vd-headline-xl-lh:     1.2;
+  --vd-headline-xl-tracking: -0.02em;
+
+  --vd-headline-md-size:   20px;
+  --vd-headline-md-weight: 600;
+  --vd-headline-md-lh:     1.4;
+  --vd-headline-md-tracking: -0.01em;
+
+  --vd-body-lg-size:   16px;
+  --vd-body-lg-weight: 400;
+  --vd-body-lg-lh:     1.6;
+
+  --vd-body-sm-size:   14px;
+  --vd-body-sm-weight: 400;
+  --vd-body-sm-lh:     1.5;
+
+  /* "technical-data": tabular numerics for live telemetry */
+  --vd-tech-size:   13px;
+  --vd-tech-weight: 600;
+  --vd-tech-lh:     1;
+  --vd-tech-tracking: 0.05em;
+
+  /* "label-caps": small section labels */
+  --vd-caps-size:   11px;
+  --vd-caps-weight: 700;
+  --vd-caps-lh:     1;
+  --vd-caps-tracking: 0.08em;
+
+  /* ---------- SPACING — 4px baseline ---------- */
+  --vd-space-base: 4px;
+  --vd-space-xs:   4px;
+  --vd-space-sm:   8px;
+  --vd-space-md:   16px;
+  --vd-space-lg:   24px;
+  --vd-space-xl:   32px;
+  --vd-space-2xl:  48px;
+  --vd-gutter:     16px;
+  --vd-sidebar-width: 256px;
+  --vd-topbar-height: 64px;
+
+  /* ---------- RADIUS (deliberately small — engineering instrument feel) ---------- */
+  --vd-radius-sm:   2px;   /* 0.125rem  — chips, badges */
+  --vd-radius:      4px;   /* 0.25rem   — DEFAULT — buttons, fields */
+  --vd-radius-md:   6px;
+  --vd-radius-lg:   8px;   /* 0.5rem    — cards */
+  --vd-radius-xl:   12px;  /* 0.75rem   — modals, large surfaces */
+  --vd-radius-full: 9999px;
+
+  /* ---------- ELEVATION — tonal layers + subtle blue glow on dark ---------- */
+  --vd-shadow-card:    0 1px 0 rgba(0,0,0,0.4);
+  --vd-shadow-raised:  0 8px 24px -8px rgba(0,0,0,0.5);
+  --vd-shadow-modal:   0 24px 48px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(173,198,255,0.05);
+  --vd-shadow-glow:    0 0 0 1px rgba(173,198,255,0.5), 0 0 12px rgba(173,198,255,0.15);
+  --vd-shadow-pulse:   0 0 8px rgba(173,198,255,0.6);
+  --vd-shadow-success: 0 0 8px rgba(52,211,153,0.4);
+  --vd-shadow-error:   0 0 12px rgba(255,90,82,0.3);
+
+  /* ---------- MOTION ---------- */
+  --vd-ease:         cubic-bezier(0.2, 0, 0.13, 1);
+  --vd-dur-fast:     120ms;
+  --vd-dur-base:     200ms;
+  --vd-dur-slow:     320ms;
+}
+
+/* =============================================================
+   SEMANTIC TYPE CLASSES
+   ============================================================= */
+
+html, body {
+  font-family: var(--vd-font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--vd-bg);
+  color: var(--vd-fg);
+}
+
+.vd-headline-xl,
+h1.vd {
+  font-family: var(--vd-font-sans);
+  font-size: var(--vd-headline-xl-size);
+  font-weight: var(--vd-headline-xl-weight);
+  line-height: var(--vd-headline-xl-lh);
+  letter-spacing: var(--vd-headline-xl-tracking);
+  color: var(--vd-fg);
+}
+
+.vd-headline-md,
+h2.vd {
+  font-family: var(--vd-font-sans);
+  font-size: var(--vd-headline-md-size);
+  font-weight: var(--vd-headline-md-weight);
+  line-height: var(--vd-headline-md-lh);
+  letter-spacing: var(--vd-headline-md-tracking);
+  color: var(--vd-fg);
+}
+
+.vd-body-lg,
+p.vd {
+  font-family: var(--vd-font-sans);
+  font-size: var(--vd-body-lg-size);
+  font-weight: var(--vd-body-lg-weight);
+  line-height: var(--vd-body-lg-lh);
+  color: var(--vd-fg);
+}
+
+.vd-body-sm {
+  font-family: var(--vd-font-sans);
+  font-size: var(--vd-body-sm-size);
+  font-weight: var(--vd-body-sm-weight);
+  line-height: var(--vd-body-sm-lh);
+  color: var(--vd-fg-variant);
+}
+
+/* technical-data: ALWAYS use tabular figures for live telemetry */
+.vd-tech,
+.vd-technical-data {
+  font-family: var(--vd-font-sans);
+  font-size: var(--vd-tech-size);
+  font-weight: var(--vd-tech-weight);
+  line-height: var(--vd-tech-lh);
+  letter-spacing: var(--vd-tech-tracking);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  color: var(--vd-fg);
+}
+
+.vd-mono {
+  font-family: var(--vd-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.vd-caps,
+.vd-label-caps {
+  font-family: var(--vd-font-sans);
+  font-size: var(--vd-caps-size);
+  font-weight: var(--vd-caps-weight);
+  line-height: var(--vd-caps-lh);
+  letter-spacing: var(--vd-caps-tracking);
+  text-transform: uppercase;
+  color: var(--vd-fg-muted);
+}
+
+.vd-brand {
+  font-family: var(--vd-font-sans);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--vd-primary-strong);
+}
+
+::selection {
+  background: var(--vd-primary-container);
+  color: var(--vd-on-primary-container);
+}

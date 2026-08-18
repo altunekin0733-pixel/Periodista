@@ -1,0 +1,93 @@
+.ticker {
+  background: var(--chrome);
+  border-bottom: 1px solid var(--outline-faint);
+  overflow: hidden;
+}
+
+.viewport {
+  overflow: hidden;
+  padding-block: 0.4rem;
+  /* Kenarlarda yumuşak geçiş — içerik ekrana sert girip çıkmaz. */
+  mask-image: linear-gradient(to right, transparent, #000 3rem, #000 calc(100% - 3rem), transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 60s linear infinite;
+}
+
+.viewport:hover .track {
+  animation-play-state: paused;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  padding-inline: 0.875rem;
+  white-space: nowrap;
+  font-size: var(--text-xs);
+}
+
+.label {
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+
+.value {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.change {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  font-weight: 600;
+  font-size: 0.6875rem;
+}
+
+.up {
+  color: var(--success);
+}
+
+.down {
+  color: var(--danger);
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    overflow-x: auto;
+    mask-image: none;
+    scrollbar-width: none;
+  }
+
+  .viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .track {
+    animation: none;
+  }
+
+  /* Hareket kapalıyken ikinci kopya gereksiz. */
+  .group:last-child {
+    display: none;
+  }
+}

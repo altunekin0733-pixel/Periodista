@@ -1,0 +1,117 @@
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: var(--space-lg);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--fg-variant);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.tab:hover {
+  border-color: var(--fg-muted);
+  color: var(--fg);
+}
+
+.tabActive {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.tabActive:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: var(--on-primary);
+}
+
+.tabCount {
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-high);
+  color: var(--fg-muted);
+  font-size: var(--text-xs);
+}
+
+.tabActive .tabCount {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--space-md);
+  background: var(--surface);
+  border: 1px solid var(--outline-faint);
+  border-radius: var(--radius);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.email {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.articleLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--primary);
+}
+
+.articleLink:hover {
+  text-decoration: underline;
+}
+
+.body {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fg-variant);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--outline-faint);
+}

@@ -1,0 +1,44 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.titleInput {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--outline-faint);
+}
+
+.actions > * {
+  flex: 1;
+}
+
+.warn {
+  color: var(--warning);
+}
+
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

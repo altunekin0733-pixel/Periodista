@@ -1,0 +1,135 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--surface);
+  border: 1px solid var(--outline-faint);
+  border-radius: var(--radius);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 36rem) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.label {
+  font-size: var(--text-caps);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.optional {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-high);
+  color: var(--fg);
+  font-size: var(--text-sm);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 5.5rem;
+  line-height: 1.6;
+}
+
+.input:hover,
+.textarea:hover {
+  border-color: var(--fg-muted);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: 0.25rem;
+}
+
+.note {
+  font-size: var(--text-xs);
+  color: var(--fg-muted);
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.success {
+  font-size: var(--text-sm);
+  color: var(--success);
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--danger);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

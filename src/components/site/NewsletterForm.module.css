@@ -1,0 +1,102 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  max-width: 22rem;
+}
+
+.label {
+  font-size: var(--text-caps);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-high);
+  color: var(--fg);
+  font-size: var(--text-sm);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.input:hover:not(:disabled) {
+  border-color: var(--fg-muted);
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--on-primary);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.submit:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.success {
+  font-size: var(--text-sm);
+  color: var(--success);
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--danger);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

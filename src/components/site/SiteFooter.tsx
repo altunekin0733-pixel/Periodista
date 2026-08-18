@@ -1,0 +1,108 @@
+import { Rss } from 'lucide-react';
+import Link from 'next/link';
+
+import { SocialIcon } from '@/components/ui/SocialIcon';
+import { categoryHref, tagHref } from '@/lib/routes';
+import { getSettings, toSocialLinks } from '@/lib/settings';
+import { SITE } from '@/lib/site-config';
+import { getCategories, getPopularTags } from '@/server/queries';
+
+import { Logo } from './Logo';
+import { NewsletterForm } from './NewsletterForm';
+import styles from './SiteFooter.module.css';
+
+export async function SiteFooter() {
+  const [categories, settings, tags] = await Promise.all([
+    getCategories(),
+    getSettings(),
+    getPopularTags(10),
+  ]);
+
+  const socials = toSocialLinks(settings);
+
+  return (
+    <footer className={styles.footer}>
+      <div className={styles.inner}>
+        <div className={styles.brand}>
+          <Logo height={30} href={null} />
+          <p className={styles.tagline}>{settings.tagline}</p>
+
+          {socials.length > 0 && (
+            <ul className={styles.socials}>
+              {socials.map((social) => (
+                <li key={social.key}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.socialLink}
+                    title={social.name}
+                    aria-label={social.name}
+                  >
+                    <SocialIcon platform={social.key} size={17} />
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href="/rss.xml" className={styles.socialLink} title="RSS" aria-label="RSS akışı">
+                  <Rss size={17} aria-hidden="true" />
+                </a>
+              </li>
+            </ul>
+          )}
+        </div>
+
+        <nav className={styles.column} aria-label="Kategoriler">
+          <p className="label-caps">Kategoriler</p>
+          <ul className={styles.list}>
+            {categories.map((category) => (
+              <li key={category.slug}>
+                <Link href={categoryHref(category.slug)} className={styles.link}>
+                  {category.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {tags.length > 0 && (
+          <nav className={styles.column} aria-label="Popüler etiketler">
+            <p className="label-caps">Etiketler</p>
+            <ul className={styles.tagList}>
+              {tags.map((tag) => (
+                <li key={tag.slug}>
+                  <Link href={tagHref(tag.slug)} className={styles.tag}>
+                    {tag.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        {settings.newsletterEnabled && (
+          <div className={styles.column}>
+            <NewsletterForm />
+          </div>
+        )}
+      </div>
+
+      <div className={styles.bottom}>
+        <p>
+          © {new Date().getFullYear()} {SITE.name}
+        </p>
+        <div className={styles.bottomLinks}>
+          <Link href="/arama" className={styles.link}>
+            Arama
+          </Link>
+          <a href="/rss.xml" className={styles.link}>
+            RSS
+          </a>
+          <Link href="/admin" className={styles.link}>
+            Yönetim Paneli
+          </Link>
+        </div>
+      </div>
+    </footer>
+  );
+}

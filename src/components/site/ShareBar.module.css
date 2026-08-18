@@ -1,0 +1,45 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding-block: var(--space-md);
+  border-block: 1px solid var(--outline-faint);
+}
+
+.list {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--fg-variant);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.button:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.copied {
+  color: var(--success);
+}

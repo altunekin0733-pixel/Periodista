@@ -1,0 +1,65 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 12rem;
+}
+
+.searchIcon {
+  position: absolute;
+  inset-inline-start: 0.6rem;
+  color: var(--fg-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.55rem 0.7rem 0.55rem 2.1rem;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-high);
+  color: var(--fg);
+  font-size: var(--text-sm);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.searchInput:hover {
+  border-color: var(--fg-muted);
+}
+
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* admin.css içindeki global sınıf — modül karması uygulanmamalı. */
+.filters :global(.admin-select) {
+  width: auto;
+  min-width: 9rem;
+}
+
+.clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.clear:hover {
+  color: var(--danger);
+}

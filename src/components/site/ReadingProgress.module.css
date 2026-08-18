@@ -1,0 +1,17 @@
+.track {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 50;
+  height: 3px;
+  pointer-events: none;
+}
+
+.bar {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+  /* transform ile ölçekleniyor; genişlik animasyonu düzen hesabı tetiklerdi. */
+  will-change: transform;
+}

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Periodista — Yönetim Paneli</title>
+<link rel="stylesheet" href="assets/colors_and_type.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0b1326; }
+  a { color: var(--vd-primary-strong); text-decoration: none; }
+  a:hover { color: var(--vd-primary); }
+</style>
+</helmet>
+<div style="background:{{ theme.bg }};min-height:100vh;transition:background 200ms ease;">
+
+  <sc-if value="{{ isNotAuthed }}" hint-placeholder-val="{{ false }}">
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div style="width:380px;background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:32px;display:flex;flex-direction:column;gap:20px;">
+        <div style="display:flex;justify-content:center;margin-bottom:4px;">
+          <sc-if value="{{ isDarkTheme }}" hint-placeholder-val="{{ true }}">
+            <img src="assets/logo-white.png" alt="Periodista" style="height:32px;width:auto;" />
+          </sc-if>
+          <sc-if value="{{ isLightTheme }}" hint-placeholder-val="{{ false }}">
+            <img src="assets/logo-black.png" alt="Periodista" style="height:32px;width:auto;" />
+          </sc-if>
+        </div>
+        <div style="text-align:center;">
+          <h1 style="font-family:Inter,sans-serif;font-size:20px;font-weight:600;color:{{ theme.fg }};margin:0 0 4px;">Yönetim Paneli</h1>
+          <p style="font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgMuted }};margin:0;">İçerik yönetimine erişmek için giriş yapın.</p>
+        </div>
+        <div>
+          <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Kullanıcı Adı</label>
+          <input value="{{ loginUsername }}" onChange="{{ onUsernameChange }}" placeholder="editor" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;" />
+        </div>
+        <div>
+          <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Şifre</label>
+          <input type="password" value="{{ loginPassword }}" onChange="{{ onPasswordChange }}" placeholder="••••••••" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;" />
+        </div>
+        <sc-if value="{{ hasLoginError }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family:Inter,sans-serif;font-size:13px;color:var(--vd-error-strong);margin:0;">{{ loginError }}</p>
+        </sc-if>
+        <button onClick="{{ submitLogin }}" style="background:var(--vd-primary-strong);border:none;color:#fff;border-radius:4px;padding:12px 16px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">Giriş Yap</button>
+        <p style="font-family:Inter,sans-serif;font-size:12px;color:{{ theme.fgMuted }};text-align:center;margin:0;">Demo erişim: herhangi bir kullanıcı adı ve şifre ile giriş yapabilirsiniz.</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isAuthed }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;">
+      <div style="width:256px;flex-shrink:0;height:100vh;position:sticky;top:0;background:{{ theme.sidebarBg }};border-right:1px solid {{ theme.sidebarBorder }};display:flex;flex-direction:column;padding:24px 16px;gap:20px;">
+        <div style="display:flex;align-items:center;gap:8px;padding:0 8px;">
+          <sc-if value="{{ isDarkTheme }}" hint-placeholder-val="{{ true }}">
+            <img src="assets/logo-white.png" alt="Periodista" style="height:30px;width:auto;" />
+          </sc-if>
+          <sc-if value="{{ isLightTheme }}" hint-placeholder-val="{{ false }}">
+            <img src="assets/logo-black.png" alt="Periodista" style="height:30px;width:auto;" />
+          </sc-if>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:4px;overflow-y:auto;">
+          <div onClick="{{ showOverview }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;cursor:pointer;background:{{ overviewBg }};color:{{ overviewColor }};font-family:Inter,sans-serif;font-size:14px;font-weight:600;" style-hover="background:rgba(77,142,255,0.08);">
+            <span class="material-symbols-outlined" style="font-size:18px;">dashboard</span>
+            Genel Bakış
+          </div>
+
+          <div onClick="{{ showCategories }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;cursor:pointer;background:{{ categoriesBg }};color:{{ categoriesColor }};font-family:Inter,sans-serif;font-size:14px;font-weight:600;" style-hover="background:rgba(77,142,255,0.08);">
+            <span class="material-symbols-outlined" style="font-size:18px;">tune</span>
+            Kategorileri Yönet
+          </div>
+          <div onClick="{{ showSettings }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;cursor:pointer;background:{{ settingsBg }};color:{{ settingsColor }};font-family:Inter,sans-serif;font-size:14px;font-weight:600;" style-hover="background:rgba(77,142,255,0.08);">
+            <span class="material-symbols-outlined" style="font-size:18px;">share</span>
+            Sosyal Medya
+          </div>
+
+          <div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};padding:16px 12px 4px;">Kategoriler</div>
+
+          <sc-for list="{{ sidebarCategories }}" as="cat" hint-placeholder-count="8">
+            <div onClick="{{ cat.onClick }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;cursor:pointer;background:{{ cat.bg }};color:{{ cat.color }};font-family:Inter,sans-serif;font-size:14px;font-weight:600;" style-hover="background:rgba(77,142,255,0.08);">
+              <span class="material-symbols-outlined" style="font-size:18px;">{{ cat.icon }}</span>
+              <span style="flex:1;">{{ cat.name }}</span>
+              <span style="font-family:Inter,sans-serif;font-size:12px;font-weight:700;color:{{ theme.fgMuted }};font-variant-numeric:tabular-nums;">{{ cat.count }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px;">
+          <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;border:1px solid {{ theme.outlineVariant }};background:none;color:{{ theme.navInactive }};font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">
+            <span class="material-symbols-outlined" style="font-size:18px;">{{ themeIcon }}</span>
+            {{ themeLabel }}
+          </button>
+          <a href="Periodista Home.dc.html" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;color:{{ theme.navInactive }};font-family:Inter,sans-serif;font-size:14px;font-weight:600;">
+            <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+            Siteye Dön
+          </a>
+          <button onClick="{{ logout }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:4px;border:none;background:none;color:var(--vd-error-strong);font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">
+            <span class="material-symbols-outlined" style="font-size:18px;">logout</span>
+            Çıkış Yap
+          </button>
+        </div>
+      </div>
+
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+        <div style="height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid {{ theme.outlineVariant }};background:{{ theme.surfaceContainerLow }};position:sticky;top:0;z-index:10;">
+          <div>
+            <div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};">İçerik Yönetimi</div>
+            <div style="font-family:Inter,sans-serif;font-size:18px;font-weight:600;color:{{ theme.fg }};">{{ sectionTitle }}</div>
+          </div>
+          <sc-if value="{{ isListView }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ openNew }}" style="display:flex;align-items:center;gap:8px;background:var(--vd-primary-strong);color:#fff;border:none;border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">
+              <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+              Yeni Haber
+            </button>
+          </sc-if>
+          <sc-if value="{{ isCategoriesView }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ openNewCategory }}" style="display:flex;align-items:center;gap:8px;background:var(--vd-primary-strong);color:#fff;border:none;border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">
+              <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+              Yeni Kategori
+            </button>
+          </sc-if>
+        </div>
+
+        <div style="flex:1;padding:32px;overflow:auto;">
+          <sc-if value="{{ isListView }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
+                <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:16px;">
+                  <div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">{{ totalLabel }}</div>
+                  <div style="font-family:Inter,sans-serif;font-size:28px;font-weight:700;color:{{ theme.fg }};font-variant-numeric:tabular-nums;">{{ total }}</div>
+                </div>
+                <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:16px;">
+                  <div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">YAYINDA</div>
+                  <div style="font-family:Inter,sans-serif;font-size:28px;font-weight:700;color:var(--vd-success);font-variant-numeric:tabular-nums;">{{ published }}</div>
+                </div>
+                <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:16px;">
+                  <div style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">TASLAK</div>
+                  <div style="font-family:Inter,sans-serif;font-size:28px;font-weight:700;color:var(--vd-warning);font-variant-numeric:tabular-nums;">{{ draftCount }}</div>
+                </div>
+              </div>
+
+              <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+                <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;overflow:hidden;">
+                  <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 0.9fr 1fr 1.3fr;padding:12px 16px;background:{{ theme.surfaceContainerHigh }};font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};">
+                    <span>Başlık</span><span>Kategori</span><span>Yazar</span><span>Durum</span><span>Tarih</span><span>İşlemler</span>
+                  </div>
+                  <sc-for list="{{ rows }}" as="row" hint-placeholder-count="6">
+                    <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 0.9fr 1fr 1.3fr;align-items:center;padding:12px 16px;border-top:1px solid {{ theme.outlineVariant }};font-family:Inter,sans-serif;font-size:14px;color:{{ theme.fg }};">
+                      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:12px;">{{ row.title }}</span>
+                      <span style="color:{{ theme.fgVariant }};font-size:13px;">{{ row.categoryName }}</span>
+                      <span style="color:{{ theme.fgVariant }};font-size:13px;">{{ row.author }}</span>
+                      <span onClick="{{ row.onToggle }}" style="cursor:pointer;display:inline-flex;justify-content:center;font-size:11px;font-weight:700;letter-spacing:0.05em;padding:4px 8px;border-radius:2px;background:{{ row.statusBg }};color:{{ row.statusColor }};">{{ row.statusLabel }}</span>
+                      <span style="color:{{ theme.fgMuted }};font-size:13px;font-variant-numeric:tabular-nums;">{{ row.dateLabel }}</span>
+                      <span style="display:flex;gap:8px;">
+                        <button onClick="{{ row.onEdit }}" style="background:none;border:1px solid {{ theme.outlineVariant }};color:{{ theme.fgVariant }};border-radius:4px;padding:6px 10px;font-family:Inter,sans-serif;font-size:12px;cursor:pointer;">Düzenle</button>
+                        <button onClick="{{ row.onDelete }}" style="background:none;border:1px solid var(--vd-error-border);color:var(--vd-error-strong);border-radius:4px;padding:6px 10px;font-family:Inter,sans-serif;font-size:12px;cursor:pointer;">Sil</button>
+                      </span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ hasNoRows }}" hint-placeholder-val="{{ false }}">
+                <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:48px;text-align:center;">
+                  <p style="font-family:Inter,sans-serif;font-size:14px;color:{{ theme.fgMuted }};margin:0 0 16px;">Bu kategoride henüz haber yok.</p>
+                  <button onClick="{{ openNew }}" style="background:var(--vd-primary-strong);border:none;color:#fff;border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">Yeni Haber Ekle</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isCategoriesView }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgMuted }};margin:0 0 20px;max-width:640px;">Kategori ekleyip kaldırabilirsiniz. Bir kategoriyi silmek, içindeki haberleri de kaldırır.</p>
+              <sc-if value="{{ hasCategoryRows }}" hint-placeholder-val="{{ true }}">
+                <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;overflow:hidden;">
+                  <div style="display:grid;grid-template-columns:0.6fr 2fr 3fr 1fr 1.3fr;padding:12px 16px;background:{{ theme.surfaceContainerHigh }};font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};">
+                    <span></span><span>Kategori</span><span>Açıklama</span><span>Haber</span><span>İşlemler</span>
+                  </div>
+                  <sc-for list="{{ categoryRows }}" as="cat" hint-placeholder-count="8">
+                    <div style="display:grid;grid-template-columns:0.6fr 2fr 3fr 1fr 1.3fr;align-items:center;padding:12px 16px;border-top:1px solid {{ theme.outlineVariant }};font-family:Inter,sans-serif;font-size:14px;color:{{ theme.fg }};">
+                      <span class="material-symbols-outlined" style="font-size:20px;color:var(--vd-primary-strong);">{{ cat.icon }}</span>
+                      <span style="font-weight:600;">{{ cat.name }}</span>
+                      <span style="color:{{ theme.fgVariant }};font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:12px;">{{ cat.desc }}</span>
+                      <span style="color:{{ theme.fgMuted }};font-size:13px;font-variant-numeric:tabular-nums;">{{ cat.count }}</span>
+                      <span style="display:flex;gap:8px;">
+                        <button onClick="{{ cat.onEdit }}" style="background:none;border:1px solid {{ theme.outlineVariant }};color:{{ theme.fgVariant }};border-radius:4px;padding:6px 10px;font-family:Inter,sans-serif;font-size:12px;cursor:pointer;">Düzenle</button>
+                        <button onClick="{{ cat.onDelete }}" style="background:none;border:1px solid var(--vd-error-border);color:var(--vd-error-strong);border-radius:4px;padding:6px 10px;font-family:Inter,sans-serif;font-size:12px;cursor:pointer;">Sil</button>
+                      </span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isCategoryFormView }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width:480px;">
+              <h2 style="font-family:Inter,sans-serif;font-size:20px;font-weight:600;color:{{ theme.fg }};margin:0 0 20px;">{{ categoryFormTitle }}</h2>
+              <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:20px;">
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Kategori Adı</label>
+                  <input value="{{ categoryDraft.name }}" onChange="{{ onCategoryNameChange }}" placeholder="Örn. Sağlık" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:15px;" />
+                </div>
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Simge</label>
+                  <select value="{{ categoryDraft.icon }}" onChange="{{ onCategoryIconChange }}" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;">
+                    <sc-for list="{{ iconOptions }}" as="ic" hint-placeholder-count="10">
+                      <option value="{{ ic }}">{{ ic }}</option>
+                    </sc-for>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Açıklama</label>
+                  <textarea value="{{ categoryDraft.desc }}" onChange="{{ onCategoryDescChange }}" rows="2" placeholder="Kısa açıklama" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;resize:vertical;"></textarea>
+                </div>
+                <div style="display:flex;gap:12px;justify-content:flex-end;padding-top:8px;border-top:1px solid {{ theme.outlineVariant }};">
+                  <button onClick="{{ cancelCategoryForm }}" style="background:none;border:1px solid {{ theme.outlineVariant }};color:{{ theme.fgVariant }};border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;cursor:pointer;">Vazgeç</button>
+                  <button onClick="{{ saveCategoryDraft }}" style="background:var(--vd-primary-strong);border:none;color:#fff;border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">Kaydet</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isSettingsView }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width:560px;">
+              <p style="font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgMuted }};margin:0 0 20px;">Site altbilgisinde görünen sosyal medya bağlantılarını düzenleyin. Boş bırakılan bir alan ikonu göstermez.</p>
+              <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:20px;">
+                <div>
+                  <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;"><span class="material-symbols-outlined" style="font-size:16px;">photo_camera</span>Instagram</label>
+                  <input value="{{ socialDraft.instagram }}" onChange="{{ onSocialInstagramChange }}" placeholder="https://instagram.com/..." style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;" />
+                </div>
+                <div>
+                  <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;"><span class="material-symbols-outlined" style="font-size:16px;">close</span>X</label>
+                  <input value="{{ socialDraft.x }}" onChange="{{ onSocialXChange }}" placeholder="https://x.com/..." style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;" />
+                </div>
+                <div>
+                  <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;"><span class="material-symbols-outlined" style="font-size:16px;">music_note</span>TikTok</label>
+                  <input value="{{ socialDraft.tiktok }}" onChange="{{ onSocialTiktokChange }}" placeholder="https://tiktok.com/@..." style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;" />
+                </div>
+                <div>
+                  <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;"><span class="material-symbols-outlined" style="font-size:16px;">send</span>Telegram</label>
+                  <input value="{{ socialDraft.telegram }}" onChange="{{ onSocialTelegramChange }}" placeholder="https://t.me/..." style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;" />
+                </div>
+                <div style="display:flex;gap:12px;justify-content:flex-end;padding-top:8px;border-top:1px solid {{ theme.outlineVariant }};">
+                  <button onClick="{{ saveSocialDraft }}" style="background:var(--vd-primary-strong);border:none;color:#fff;border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">Kaydet</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isFormView }}" hint-placeholder-val="{{ false }}">
+            <div style="max-width:720px;">
+              <h2 style="font-family:Inter,sans-serif;font-size:20px;font-weight:600;color:{{ theme.fg }};margin:0 0 20px;">{{ formTitle }}</h2>
+              <div style="background:{{ theme.surfaceContainer }};border:1px solid {{ theme.outlineVariant }};border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:20px;">
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Başlık</label>
+                  <input value="{{ draft.title }}" onChange="{{ onTitleChange }}" placeholder="Haber başlığı" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:15px;" />
+                </div>
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Özet (Dek)</label>
+                  <textarea value="{{ draft.dek }}" onChange="{{ onDekChange }}" rows="2" placeholder="Kısa özet" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;resize:vertical;"></textarea>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                  <div>
+                    <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Kategori</label>
+                    <select value="{{ draft.category }}" onChange="{{ onCategoryChange }}" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;">
+                      <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="8">
+                        <option value="{{ cat.slug }}">{{ cat.name }}</option>
+                      </sc-for>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Yazar</label>
+                    <input value="{{ draft.author }}" onChange="{{ onAuthorChange }}" placeholder="Yazar adı" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;" />
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">İçerik (her paragraf yeni satırda)</label>
+                  <textarea value="{{ draft.body }}" onChange="{{ onBodyChange }}" rows="8" placeholder="Haber metni" style="width:100%;background:{{ theme.surfaceContainerHigh }};border:1px solid {{ theme.outlineVariant }};border-radius:4px;padding:10px 12px;color:{{ theme.fg }};font-family:Inter,sans-serif;font-size:14px;line-height:1.6;resize:vertical;"></textarea>
+                </div>
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:4px;">Görsel</label>
+                  <p style="font-family:Inter,sans-serif;font-size:12px;color:{{ theme.fgMuted }};margin:0 0 8px;">Önerilen boyut: <strong style="color:{{ theme.fgVariant }};">800 × 800 px</strong> (kare, ana sayfa kartları için), en az 600 × 600 px. Manşette otomatik olarak 16:9 kırpılır.</p>
+                  <div style="position:relative;width:100%;height:180px;border-radius:8px;">
+                    <input type="file" accept="image/*" onChange="{{ onImageChange }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;" />
+                    <div style="position:absolute;inset:0;display:{{ uploadPlaceholderDisplay }};flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1.5px dashed {{ theme.outlineVariant }};border-radius:8px;background:{{ theme.surfaceContainerHigh }};pointer-events:none;">
+                      <span class="material-symbols-outlined" style="font-size:28px;color:{{ theme.fgMuted }};">add_photo_alternate</span>
+                      <span style="font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgMuted }};">Görsel yüklemek için tıklayın</span>
+                      <span style="font-family:Inter,sans-serif;font-size:11px;color:{{ theme.fgMuted }};">PNG, JPG</span>
+                    </div>
+                    <div style="position:absolute;inset:0;border-radius:8px;display:{{ draftImageDisplay }};background-image:{{ draftImageBg }};background-size:cover;background-position:center;pointer-events:none;"></div>
+                    <button onClick="{{ removeImage }}" style="position:absolute;top:8px;right:8px;z-index:2;display:{{ draftImageDisplay }};align-items:center;justify-content:center;width:28px;height:28px;border-radius:9999px;border:none;background:rgba(0,0,0,0.55);color:#fff;cursor:pointer;">
+                      <span class="material-symbols-outlined" style="font-size:16px;">close</span>
+                    </button>
+                  </div>
+                </div>
+                <div style="display:flex;gap:24px;">
+                  <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgVariant }};">
+                    <input type="checkbox" checked="{{ draft.featured }}" onChange="{{ onFeaturedChange }}" /> Öne çıkan (manşet)
+                  </label>
+                  <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgVariant }};">
+                    <input type="checkbox" checked="{{ draft.breaking }}" onChange="{{ onBreakingChange }}" /> Son dakika
+                  </label>
+                </div>
+                <div>
+                  <label style="display:block;font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:{{ theme.fgMuted }};margin-bottom:8px;">Durum</label>
+                  <div style="display:flex;gap:16px;">
+                    <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgVariant }};">
+                      <input type="radio" name="status" value="draft" checked="{{ statusIsDraft }}" onChange="{{ onStatusChange }}" /> Taslak
+                    </label>
+                    <label style="display:flex;align-items:center;gap:8px;font-family:Inter,sans-serif;font-size:13px;color:{{ theme.fgVariant }};">
+                      <input type="radio" name="status" value="published" checked="{{ statusIsPublished }}" onChange="{{ onStatusChange }}" /> Yayında
+                    </label>
+                  </div>
+                </div>
+                <div style="display:flex;gap:12px;justify-content:flex-end;padding-top:8px;border-top:1px solid {{ theme.outlineVariant }};">
+                  <button onClick="{{ cancelForm }}" style="background:none;border:1px solid {{ theme.outlineVariant }};color:{{ theme.fgVariant }};border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;cursor:pointer;">Vazgeç</button>
+                  <button onClick="{{ saveDraft }}" style="background:var(--vd-primary-strong);border:none;color:#fff;border-radius:4px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;">Kaydet</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DARK = {
+  bg: '#0b1326', surfaceContainer: '#171f33', surfaceContainerHigh: '#222a3d', surfaceContainerLow: '#131b2e',
+  surfaceVariant: '#2d3449', fg: '#dae2fd', fgVariant: '#c2c6d6', fgMuted: '#8c909f', outlineVariant: '#424754',
+  chromeBgSolid: '#020617', chromeBgTranslucent: 'rgba(2,6,23,0.8)', sidebarBg: '#0f172a', sidebarBorder: '#1e293b', navInactive: '#94a3b8',
+};
+const LIGHT = {
+  bg: '#f3f5f9', surfaceContainer: '#ffffff', surfaceContainerHigh: '#eef1f7', surfaceContainerLow: '#f8f9fb',
+  surfaceVariant: '#e3e7ee', fg: '#11131a', fgVariant: '#454a5c', fgMuted: '#6b7080', outlineVariant: '#dde1e8',
+  chromeBgSolid: '#ffffff', chromeBgTranslucent: 'rgba(255,255,255,0.85)', sidebarBg: '#ffffff', sidebarBorder: '#dde1e8', navInactive: '#6b7080',
+};
+
+class Component extends DCLogic {
+  state = {
+    list: [], view: 'list', draft: null, categoryFilter: null,
+    theme: (typeof localStorage !== 'undefined' && localStorage.getItem('periodista_theme')) || 'dark',
+    authed: (typeof localStorage !== 'undefined' && localStorage.getItem('periodista_admin_authed')) === 'true',
+    loginUsername: '', loginPassword: '', loginError: '',
+    socialDraft: null,
+  };
+
+  async componentDidMount() {
+    const store = await import('./store.js');
+    this.store = store;
+    this.refresh();
+  }
+
+  refresh() {
+    this.setState({ list: this.store.getAll() });
+  }
+
+  toggleTheme = () => {
+    const next = this.state.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('periodista_theme', next); } catch (e) {}
+    this.setState({ theme: next });
+  };
+
+  onUsernameChange = (e) => this.setState({ loginUsername: e.target.value, loginError: '' });
+  onPasswordChange = (e) => this.setState({ loginPassword: e.target.value, loginError: '' });
+
+  submitLogin = () => {
+    if (!this.state.loginUsername.trim() || !this.state.loginPassword.trim()) {
+      this.setState({ loginError: 'Kullanıcı adı ve şifre gerekli.' });
+      return;
+    }
+    try { localStorage.setItem('periodista_admin_authed', 'true'); } catch (e) {}
+    this.setState({ authed: true, loginError: '' });
+  };
+
+  logout = () => {
+    try { localStorage.removeItem('periodista_admin_authed'); } catch (e) {}
+    this.setState({ authed: false, loginUsername: '', loginPassword: '' });
+  };
+
+  showOverview = () => this.setState({ categoryFilter: null, view: 'list' });
+  setCategoryFilter = (slug) => this.setState({ categoryFilter: slug, view: 'list' });
+
+  blankDraft() {
+    const cats = (this.store && this.store.getCategories()) || [];
+    const cat = this.state.categoryFilter || (cats[0] || { slug: '' }).slug;
+    return { id: null, title: '', dek: '', category: cat, author: '', body: '', readMins: 4, image: null, featured: false, breaking: false, status: 'draft' };
+  }
+
+  blankCategoryDraft() {
+    return { slug: '', name: '', icon: 'newspaper', desc: '', isNew: true };
+  }
+
+  openNewCategory = () => this.setState({ view: 'category-form', categoryDraft: this.blankCategoryDraft() });
+
+  openEditCategory = (c) => this.setState({ view: 'category-form', categoryDraft: { ...c, isNew: false } });
+
+  cancelCategoryForm = () => this.setState({ view: 'categories', categoryDraft: null });
+
+  setCategoryField = (key, val) => this.setState(s => ({ categoryDraft: { ...s.categoryDraft, [key]: val } }));
+
+  saveCategoryDraft = () => {
+    const d = this.state.categoryDraft;
+    if (!d.name.trim()) return;
+    const slug = d.isNew ? this.store.slugify(d.name) : d.slug;
+    this.store.upsertCategory({ slug, name: d.name.trim(), icon: d.icon, desc: d.desc || '' });
+    this.setState({ view: 'categories', categoryDraft: null });
+  };
+
+  removeCategory = (c) => {
+    const count = this.store.countByCategory(c.slug);
+    const msg = count > 0
+      ? `"${c.name}" kategorisinde ${count} haber var. Kategoriyi ve içindeki tüm haberleri silmek istediğinize emin misiniz?`
+      : `"${c.name}" kategorisini silmek istediğinize emin misiniz?`;
+    if (!window.confirm(msg)) return;
+    this.store.deleteCategory(c.slug);
+    this.store.removeByCategory(c.slug);
+    if (this.state.categoryFilter === c.slug) this.setState({ categoryFilter: null });
+    this.refresh();
+    this.forceUpdate();
+  };
+
+  showCategories = () => this.setState({ view: 'categories' });
+
+  showSettings = () => this.setState({ view: 'settings', socialDraft: this.store.getSocialLinks() });
+
+  setSocialField = (key, val) => this.setState(s => ({ socialDraft: { ...s.socialDraft, [key]: val } }));
+
+  saveSocialDraft = () => {
+    this.store.saveSocialLinks(this.state.socialDraft);
+  };
+
+  openNew = () => this.setState({ view: 'form', draft: this.blankDraft() });
+
+  openEdit = (a) => this.setState({ view: 'form', draft: { ...a, body: (a.body || []).join('\n\n') } });
+
+  cancelForm = () => this.setState({ view: 'list', draft: null });
+
+  setField = (key, val) => this.setState(s => ({ draft: { ...s.draft, [key]: val } }));
+
+  onImageChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => this.setField('image', reader.result);
+    reader.readAsDataURL(file);
+  };
+
+  removeImage = () => this.setField('image', null);
+
+  saveDraft = () => {
+    const d = this.state.draft;
+    if (!d.title.trim()) return;
+    const article = {
+      ...d,
+      id: d.id || this.store.nextId(),
+      publishedAt: d.publishedAt || new Date().toISOString(),
+      readMins: Number(d.readMins) || 3,
+      body: d.body.split('\n').map(s => s.trim()).filter(Boolean),
+    };
+    this.store.upsert(article);
+    this.refresh();
+    this.setState({ view: 'list', draft: null });
+  };
+
+  removeArticle = (id) => {
+    if (!window.confirm('Bu haberi silmek istediğinize emin misiniz?')) return;
+    this.store.remove(id);
+    this.refresh();
+  };
+
+  togglePublish = (a) => {
+    this.store.upsert({ ...a, status: a.status === 'published' ? 'draft' : 'published' });
+    this.refresh();
+  };
+
+  renderVals() {
+    const theme = this.state.theme === 'dark' ? DARK : LIGHT;
+    const CATS = this.store ? this.store.getCategories() : [];
+    const ICONS = this.store ? this.store.CATEGORY_ICONS : [];
+    const list = this.state.list;
+    const filter = this.state.categoryFilter;
+    const filtered = filter ? list.filter(a => a.category === filter) : list;
+    const total = filtered.length;
+    const published = filtered.filter(a => a.status === 'published').length;
+    const draftCount = total - published;
+    const catName = slug => (CATS.find(c => c.slug === slug) || {}).name || slug;
+    const rows = filtered.map(a => ({
+      ...a,
+      categoryName: catName(a.category),
+      statusLabel: a.status === 'published' ? 'YAYINDA' : 'TASLAK',
+      statusBg: a.status === 'published' ? 'rgba(52,211,153,0.12)' : 'rgba(251,191,36,0.12)',
+      statusColor: a.status === 'published' ? '#34d399' : '#c98a06',
+      dateLabel: new Date(a.publishedAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' }),
+      onEdit: () => this.openEdit(a),
+      onDelete: () => this.removeArticle(a.id),
+      onToggle: () => this.togglePublish(a),
+    }));
+    const categories = CATS.map(c => ({ ...c }));
+    const sidebarCategories = CATS.map(c => ({
+      ...c,
+      count: list.filter(a => a.category === c.slug).length,
+      onClick: () => this.setCategoryFilter(c.slug),
+      bg: filter === c.slug ? 'rgba(77,142,255,0.08)' : 'transparent',
+      color: filter === c.slug ? 'var(--vd-primary-strong)' : theme.navInactive,
+    }));
+    const d = this.state.draft || this.blankDraft();
+    const cd = this.state.categoryDraft || this.blankCategoryDraft();
+    const categoryRows = CATS.map(c => ({
+      ...c,
+      count: list.filter(a => a.category === c.slug).length,
+      onEdit: () => this.openEditCategory(c),
+      onDelete: () => this.removeCategory(c),
+    }));
+    return {
+      theme,
+      themeIcon: this.state.theme === 'dark' ? 'light_mode' : 'dark_mode',
+      themeLabel: this.state.theme === 'dark' ? 'Açık Tema' : 'Koyu Tema',
+      toggleTheme: this.toggleTheme,
+      isDarkTheme: this.state.theme === 'dark',
+      isLightTheme: this.state.theme !== 'dark',
+      isAuthed: this.state.authed,
+      isNotAuthed: !this.state.authed,
+      loginUsername: this.state.loginUsername,
+      loginPassword: this.state.loginPassword,
+      loginError: this.state.loginError,
+      hasLoginError: !!this.state.loginError,
+      onUsernameChange: this.onUsernameChange,
+      onPasswordChange: this.onPasswordChange,
+      submitLogin: this.submitLogin,
+      logout: this.logout,
+      showOverview: this.showOverview,
+      overviewBg: !filter ? 'rgba(77,142,255,0.08)' : 'transparent',
+      overviewColor: !filter ? 'var(--vd-primary-strong)' : theme.navInactive,
+      sidebarCategories,
+      sectionTitle: this.state.view === 'categories' ? 'Kategori Yönetimi' : this.state.view === 'category-form' ? (cd.isNew ? 'Yeni Kategori' : 'Kategoriyi Düzenle') : this.state.view === 'settings' ? 'Sosyal Medya' : this.state.view === 'form' ? (d.id ? 'Haberi Düzenle' : 'Yeni Haber') : (filter ? catName(filter) : 'Genel Bakış'),
+      totalLabel: filter ? 'BU KATEGORİDE' : 'TOPLAM HABER',
+      isListView: this.state.view === 'list',
+      isFormView: this.state.view === 'form',
+      isCategoriesView: this.state.view === 'categories',
+      isCategoryFormView: this.state.view === 'category-form',
+      isSettingsView: this.state.view === 'settings',
+      showSettings: this.showSettings,
+      settingsBg: this.state.view === 'settings' ? 'rgba(77,142,255,0.08)' : 'transparent',
+      settingsColor: this.state.view === 'settings' ? 'var(--vd-primary-strong)' : theme.navInactive,
+      socialDraft: this.state.socialDraft || (this.store ? this.store.getSocialLinks() : {}),
+      saveSocialDraft: this.saveSocialDraft,
+      onSocialInstagramChange: (e) => this.setSocialField('instagram', e.target.value),
+      onSocialXChange: (e) => this.setSocialField('x', e.target.value),
+      onSocialTiktokChange: (e) => this.setSocialField('tiktok', e.target.value),
+      onSocialTelegramChange: (e) => this.setSocialField('telegram', e.target.value),
+      showCategories: this.showCategories,
+      categoriesBg: this.state.view === 'categories' || this.state.view === 'category-form' ? 'rgba(77,142,255,0.08)' : 'transparent',
+      categoriesColor: this.state.view === 'categories' || this.state.view === 'category-form' ? 'var(--vd-primary-strong)' : theme.navInactive,
+      categoryRows,
+      hasCategoryRows: categoryRows.length > 0,
+      openNewCategory: this.openNewCategory,
+      cancelCategoryForm: this.cancelCategoryForm,
+      saveCategoryDraft: this.saveCategoryDraft,
+      categoryDraft: cd,
+      categoryFormTitle: cd.isNew ? 'Yeni Kategori' : 'Kategoriyi Düzenle',
+      iconOptions: ICONS,
+      onCategoryNameChange: (e) => this.setCategoryField('name', e.target.value),
+      onCategoryDescChange: (e) => this.setCategoryField('desc', e.target.value),
+      onCategoryIconChange: (e) => this.setCategoryField('icon', e.target.value),
+      removeImage: this.removeImage,
+      uploadPlaceholderDisplay: d.image ? 'none' : 'flex',
+      formTitle: d.id ? 'Haberi Düzenle' : 'Yeni Haber',
+      total, published, draftCount,
+      rows,
+      hasRows: rows.length > 0,
+      hasNoRows: rows.length === 0,
+      categories,
+      draft: d,
+      hasDraftImage: !!d.image,
+      draftImageBg: d.image ? `url(${d.image})` : 'none',
+      draftImageDisplay: d.image ? 'block' : 'none',
+      statusIsDraft: d.status !== 'published',
+      statusIsPublished: d.status === 'published',
+      openNew: this.openNew,
+      cancelForm: this.cancelForm,
+      saveDraft: this.saveDraft,
+      onImageChange: this.onImageChange,
+      onTitleChange: (e) => this.setField('title', e.target.value),
+      onDekChange: (e) => this.setField('dek', e.target.value),
+      onAuthorChange: (e) => this.setField('author', e.target.value),
+      onBodyChange: (e) => this.setField('body', e.target.value),
+      onCategoryChange: (e) => this.setField('category', e.target.value),
+      onStatusChange: (e) => this.setField('status', e.target.value),
+      onFeaturedChange: (e) => this.setField('featured', e.target.checked),
+      onBreakingChange: (e) => this.setField('breaking', e.target.checked),
+    };
+  }
+}
+
+</script>
+</body>
+</html>
