@@ -2,7 +2,7 @@ name: GitHub Pages'e yayınla
 
 on:
   push:
-    branches: [statik-site]
+    branches: [main]
   # Panelden elle de tetiklenebilir.
   workflow_dispatch:
 

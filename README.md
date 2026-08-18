@@ -4,9 +4,9 @@ Türkçe haber sitesi. Next.js ile derlenip **GitHub Pages**'te yayınlanan tama
 statik bir site. Sunucu ve veritabanı yoktur; haberler depoda markdown dosyası
 olarak durur.
 
-> **Not:** Bu `statik-site` dalıdır. `main` dalında aynı tasarımın yönetim
-> paneli, veritabanı ve yorum sistemi olan **dinamik sürümü** durur (Vercel için).
-> Fikir değiştirirseniz o dal hazır bekliyor.
+> **Not:** Yayınlanan sürüm budur (`main`). Aynı tasarımın yönetim paneli,
+> veritabanı ve yorum sistemi olan **dinamik sürümü** `dinamik-vercel` dalında
+> durur (Vercel için). Fikir değiştirirseniz o dal hazır bekliyor.
 
 ---
 
@@ -137,7 +137,7 @@ piyasa şeridinin açık/kapalı durumu.
 
 1. Depo → **Settings → Pages**
 2. **Source** olarak **GitHub Actions** seçin (Branch değil)
-3. `statik-site` dalına yapılan her push otomatik yayınlar
+3. `main` dalına yapılan her push otomatik yayınlar
 
 Yayın adresi: `https://<kullanici>.github.io/Periodista/`
 
