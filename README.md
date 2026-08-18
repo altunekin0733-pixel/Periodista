@@ -35,7 +35,7 @@ olarak durur.
 | Görsel yükleme arayüzü | Görseller depoya elle eklenir |
 | Okunma sayacı | Sayacı tutacak veritabanı yok |
 
-Bu özellikler `main` dalındaki dinamik sürümde mevcuttur.
+Bu özellikler `dinamik-vercel` dalındaki sürümde mevcuttur.
 
 ---
 
