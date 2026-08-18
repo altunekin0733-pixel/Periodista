@@ -2,54 +2,58 @@ import { Rss } from 'lucide-react';
 import Link from 'next/link';
 
 import { SocialIcon } from '@/components/ui/SocialIcon';
+import { getAllTags, getCategories, getSettings } from '@/lib/content';
 import { categoryHref, tagHref } from '@/lib/routes';
-import { getSettings, toSocialLinks } from '@/lib/settings';
-import { SITE } from '@/lib/site-config';
-import { getCategories, getPopularTags } from '@/server/queries';
+import { SITE, SOCIAL_PLATFORMS } from '@/lib/site-config';
 
 import { Logo } from './Logo';
-import { NewsletterForm } from './NewsletterForm';
 import styles from './SiteFooter.module.css';
 
-export async function SiteFooter() {
-  const [categories, settings, tags] = await Promise.all([
-    getCategories(),
-    getSettings(),
-    getPopularTags(10),
-  ]);
+/** Yalnızca doldurulmuş ve http(s) ile başlayan bağlantılar gösterilir. */
+function socialLinks(social: Record<string, string>) {
+  return SOCIAL_PLATFORMS.flatMap((platform) => {
+    const url = social[platform.key]?.trim();
 
-  const socials = toSocialLinks(settings);
+    if (!url || !/^https?:\/\//i.test(url)) return [];
+
+    return [{ key: platform.key, name: platform.name, url }];
+  });
+}
+
+export function SiteFooter() {
+  const categories = getCategories();
+  const settings = getSettings();
+  const tags = getAllTags().slice(0, 10);
+  const socials = socialLinks(settings.sosyal);
 
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.brand}>
           <Logo height={30} href={null} />
-          <p className={styles.tagline}>{settings.tagline}</p>
+          <p className={styles.tagline}>{settings.slogan}</p>
 
-          {socials.length > 0 && (
-            <ul className={styles.socials}>
-              {socials.map((social) => (
-                <li key={social.key}>
-                  <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.socialLink}
-                    title={social.name}
-                    aria-label={social.name}
-                  >
-                    <SocialIcon platform={social.key} size={17} />
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a href="/rss.xml" className={styles.socialLink} title="RSS" aria-label="RSS akışı">
-                  <Rss size={17} aria-hidden="true" />
+          <ul className={styles.socials}>
+            {socials.map((social) => (
+              <li key={social.key}>
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialLink}
+                  title={social.name}
+                  aria-label={social.name}
+                >
+                  <SocialIcon platform={social.key} size={17} />
                 </a>
               </li>
-            </ul>
-          )}
+            ))}
+            <li>
+              <Link href="/rss.xml" className={styles.socialLink} title="RSS" aria-label="RSS akışı">
+                <Rss size={17} aria-hidden="true" />
+              </Link>
+            </li>
+          </ul>
         </div>
 
         <nav className={styles.column} aria-label="Kategoriler">
@@ -80,11 +84,10 @@ export async function SiteFooter() {
           </nav>
         )}
 
-        {settings.newsletterEnabled && (
-          <div className={styles.column}>
-            <NewsletterForm />
-          </div>
-        )}
+        <div className={styles.column}>
+          <p className="label-caps">Hakkında</p>
+          <p className={styles.about}>{settings.aciklama}</p>
+        </div>
       </div>
 
       <div className={styles.bottom}>
@@ -95,11 +98,8 @@ export async function SiteFooter() {
           <Link href="/arama" className={styles.link}>
             Arama
           </Link>
-          <a href="/rss.xml" className={styles.link}>
+          <Link href="/rss.xml" className={styles.link}>
             RSS
-          </a>
-          <Link href="/admin" className={styles.link}>
-            Yönetim Paneli
           </Link>
         </div>
       </div>

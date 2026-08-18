@@ -1,16 +1,21 @@
 import { notFound } from 'next/navigation';
 
 import { SiteChrome } from '@/components/site/SiteChrome';
-import { getCategoryBySlug } from '@/server/queries';
+import { getCategories, getCategoryBySlug } from '@/lib/content';
 
 type CategoryLayoutProps = {
   children: React.ReactNode;
   params: Promise<{ kategori: string }>;
 };
 
+/** Statik dışa aktarımda hangi kategori düzenlerinin üretileceğini belirler. */
+export function generateStaticParams() {
+  return getCategories().map((category) => ({ kategori: category.slug }));
+}
+
 export default async function CategoryLayout({ children, params }: CategoryLayoutProps) {
   const { kategori } = await params;
-  const category = await getCategoryBySlug(kategori);
+  const category = getCategoryBySlug(kategori);
 
   if (!category) notFound();
 

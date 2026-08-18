@@ -142,3 +142,9 @@
   display: flex;
   gap: var(--space-md);
 }
+
+.about {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--fg-muted);
+}

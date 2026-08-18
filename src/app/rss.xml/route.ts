@@ -1,19 +1,18 @@
+import { getArticles, getSettings } from '@/lib/content';
 import { articleHref } from '@/lib/routes';
-import { getSettings } from '@/lib/settings';
 import { SITE, absoluteUrl } from '@/lib/site-config';
 import { escapeXml } from '@/lib/xml';
-import { getAllPublishedForFeed } from '@/server/queries';
 
-// Derleme anında değil, ilk istekte üretilir; tazeliği CDN önbelleği yönetir.
-export const dynamic = 'force-dynamic';
+// Statik dışa aktarımda bu uç, derleme anında tek bir dosyaya dönüşür.
+export const dynamic = 'force-static';
 
-export async function GET() {
-  const [articles, settings] = await Promise.all([getAllPublishedForFeed(50), getSettings()]);
+export function GET() {
+  const settings = getSettings();
 
-  const items = articles
+  const items = getArticles()
+    .slice(0, 50)
     .map((article) => {
       const url = absoluteUrl(articleHref(article.category.slug, article.slug));
-      const pubDate = (article.publishedAt ?? article.updatedAt).toUTCString();
 
       return `    <item>
       <title>${escapeXml(article.title)}</title>
@@ -22,7 +21,7 @@ export async function GET() {
       <description>${escapeXml(article.dek)}</description>
       <category>${escapeXml(article.category.name)}</category>
       <dc:creator>${escapeXml(article.authorName)}</dc:creator>
-      <pubDate>${pubDate}</pubDate>
+      <pubDate>${new Date(article.publishedAt).toUTCString()}</pubDate>
     </item>`;
     })
     .join('\n');
@@ -32,18 +31,14 @@ export async function GET() {
   <channel>
     <title>${escapeXml(SITE.name)}</title>
     <link>${escapeXml(absoluteUrl('/'))}</link>
-    <description>${escapeXml(settings.description)}</description>
+    <description>${escapeXml(settings.aciklama || SITE.description)}</description>
     <language>tr</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${escapeXml(absoluteUrl('/rss.xml'))}" rel="self" type="application/rss+xml" />
 ${items}
   </channel>
 </rss>`;
 
   return new Response(feed, {
-    headers: {
-      'content-type': 'application/rss+xml; charset=utf-8',
-      'cache-control': 'public, max-age=0, s-maxage=900, stale-while-revalidate=3600',
-    },
+    headers: { 'content-type': 'application/rss+xml; charset=utf-8' },
   });
 }

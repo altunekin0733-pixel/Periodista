@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 import { formatRelativeTime, toIsoString } from '@/lib/format';
 import { articleHref } from '@/lib/routes';
-import type { ArticleCard } from '@/server/queries';
+import type { Article } from '@/lib/content';
 
 import styles from './HeadlineList.module.css';
 
 type HeadlineListProps = {
   title: string;
-  articles: ArticleCard[];
+  articles: Article[];
   live?: boolean;
 };
 
@@ -26,7 +26,7 @@ export function HeadlineList({ title, articles, live = false }: HeadlineListProp
 
       <ol className={styles.list}>
         {articles.map((article, index) => (
-          <li key={article.id} className={styles.item}>
+          <li key={article.slug} className={styles.item}>
             <span className={`${styles.index} tabular`} aria-hidden="true">
               {String(index + 1).padStart(2, '0')}
             </span>

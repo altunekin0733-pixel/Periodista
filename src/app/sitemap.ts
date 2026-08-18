@@ -1,41 +1,30 @@
 import type { MetadataRoute } from 'next';
 
+import { getAllTags, getArticles, getCategories } from '@/lib/content';
 import { articleHref, categoryHref, tagHref } from '@/lib/routes';
 import { absoluteUrl } from '@/lib/site-config';
-import { getAllPublishedForFeed, getCategories, getPopularTags } from '@/server/queries';
 
-// Tarayıcılara açık dosya; derleme anında veritabanına bağlanmaya gerek yok.
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, categories, tags] = await Promise.all([
-    getAllPublishedForFeed(5000),
-    getCategories(),
-    getPopularTags(100),
-  ]);
-
-  const newest = articles[0]?.publishedAt ?? new Date();
+export default function sitemap(): MetadataRoute.Sitemap {
+  const articles = getArticles();
+  const newest = articles[0]?.publishedAt ?? new Date().toISOString();
 
   return [
-    {
-      url: absoluteUrl('/'),
-      lastModified: newest,
-      changeFrequency: 'hourly',
-      priority: 1,
-    },
-    ...categories.map((category) => ({
+    { url: absoluteUrl('/'), lastModified: newest, changeFrequency: 'hourly', priority: 1 },
+    ...getCategories().map((category) => ({
       url: absoluteUrl(categoryHref(category.slug)),
       lastModified: newest,
-      changeFrequency: 'hourly' as const,
+      changeFrequency: 'daily' as const,
       priority: 0.8,
     })),
     ...articles.map((article) => ({
       url: absoluteUrl(articleHref(article.category.slug, article.slug)),
-      lastModified: article.updatedAt,
+      lastModified: article.publishedAt,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     })),
-    ...tags.map((tag) => ({
+    ...getAllTags().map((tag) => ({
       url: absoluteUrl(tagHref(tag.slug)),
       lastModified: newest,
       changeFrequency: 'weekly' as const,

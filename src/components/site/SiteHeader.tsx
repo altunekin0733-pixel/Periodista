@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { categoryHref } from '@/lib/routes';
-import { getCategories } from '@/server/queries';
+import { getCategories } from '@/lib/content';
 
 import { HeaderActions } from './HeaderActions';
 import { Logo } from './Logo';
@@ -12,8 +12,8 @@ type SiteHeaderProps = {
   logoVariant?: string;
 };
 
-export async function SiteHeader({ logoVariant = 'default' }: SiteHeaderProps) {
-  const categories = await getCategories();
+export function SiteHeader({ logoVariant = 'default' }: SiteHeaderProps) {
+  const categories = getCategories();
 
   return (
     <header className={styles.header}>

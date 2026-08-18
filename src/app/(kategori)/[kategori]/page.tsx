@@ -2,24 +2,24 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ArticleCard } from '@/components/site/ArticleCard';
-import { Pagination } from '@/components/site/Pagination';
 import { CategoryIcon } from '@/components/ui/Icon';
-import { categoryHref, parsePageParam } from '@/lib/routes';
+import { getArticlesByCategory, getCategories, getCategoryBySlug } from '@/lib/content';
+import { categoryHref } from '@/lib/routes';
 import { SITE, absoluteUrl } from '@/lib/site-config';
-import { getArticlesByCategory, getCategoryBySlug } from '@/server/queries';
 
 import styles from './page.module.css';
 
-export const revalidate = 120;
-
 type PageProps = {
   params: Promise<{ kategori: string }>;
-  searchParams: Promise<{ sayfa?: string }>;
 };
+
+export function generateStaticParams() {
+  return getCategories().map((category) => ({ kategori: category.slug }));
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { kategori } = await params;
-  const category = await getCategoryBySlug(kategori);
+  const category = getCategoryBySlug(kategori);
 
   if (!category) return { title: 'Kategori bulunamadı' };
 
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: category.name,
     description,
-    alternates: { canonical: categoryHref(category.slug) },
+    alternates: { canonical: absoluteUrl(categoryHref(category.slug)) },
     openGraph: {
       type: 'website',
       title: `${category.name} — ${SITE.name}`,
@@ -38,17 +38,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: PageProps) {
-  const [{ kategori }, query] = await Promise.all([params, searchParams]);
-  const category = await getCategoryBySlug(kategori);
+export default async function CategoryPage({ params }: PageProps) {
+  const { kategori } = await params;
+  const category = getCategoryBySlug(kategori);
 
   if (!category) notFound();
 
-  const page = parsePageParam(query.sayfa);
-  const { items, total, pageCount } = await getArticlesByCategory(category.id, page);
-
-  if (page > 1 && items.length === 0) notFound();
-
+  const items = getArticlesByCategory(category.slug);
   const [lead, ...rest] = items;
 
   return (
@@ -65,14 +61,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
               {category.description && <p className={styles.description}>{category.description}</p>}
             </div>
 
-            <p className={`${styles.count} tabular`}>
-              {total} haber
-              {pageCount > 1 && (
-                <span className={styles.pageInfo}>
-                  · sayfa {page}/{pageCount}
-                </span>
-              )}
-            </p>
+            <p className={`${styles.count} tabular`}>{items.length} haber</p>
           </div>
         </div>
       </header>
@@ -82,22 +71,20 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           <p className={styles.empty}>Bu kategoride henüz yayınlanmış haber yok.</p>
         ) : (
           <div className={styles.list}>
-            {/* İlk sayfanın ilk haberi geniş kart olarak öne çıkar. */}
-            {page === 1 && lead && (
+            {/* İlk haber geniş kart olarak öne çıkar. */}
+            {lead && (
               <div className={styles.lead}>
                 <ArticleCard article={lead} variant="lead" showDek priority />
               </div>
             )}
 
             <div className={styles.grid}>
-              {(page === 1 ? rest : items).map((article) => (
-                <ArticleCard key={article.id} article={article} showDek />
+              {rest.map((article) => (
+                <ArticleCard key={article.slug} article={article} showDek />
               ))}
             </div>
           </div>
         )}
-
-        <Pagination basePath={categoryHref(category.slug)} page={page} pageCount={pageCount} />
       </div>
     </>
   );

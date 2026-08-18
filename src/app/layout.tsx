@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 
-import { SITE, getSiteUrl } from '@/lib/site-config';
+import { SITE, absoluteUrl } from '@/lib/site-config';
 
 import './globals.css';
 
@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(getSiteUrl()),
+  metadataBase: new URL(absoluteUrl('/')),
   title: {
     default: `${SITE.name} — Güncel Haberler`,
     template: `%s — ${SITE.name}`,
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   description: SITE.description,
   applicationName: SITE.name,
   alternates: {
-    canonical: '/',
-    types: { 'application/rss+xml': '/rss.xml' },
+    canonical: absoluteUrl('/'),
+    types: { 'application/rss+xml': absoluteUrl('/rss.xml') },
   },
   openGraph: {
     type: 'website',

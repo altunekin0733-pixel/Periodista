@@ -2,31 +2,33 @@ import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 import { ArticleCard } from '@/components/site/ArticleCard';
-import { CommentSection } from '@/components/site/CommentSection';
 import { ReadingProgress } from '@/components/site/ReadingProgress';
 import { ShareBar } from '@/components/site/ShareBar';
-import { ViewCounter } from '@/components/site/ViewCounter';
-import { formatLongDate, toIsoString } from '@/lib/format';
+import { getArticleBySlug, getArticles, getRelatedArticles } from '@/lib/content';
+import { formatLongDate } from '@/lib/format';
 import { articleHref, categoryHref, tagHref } from '@/lib/routes';
 import { truncate } from '@/lib/sanitize';
-import { getSettings } from '@/lib/settings';
 import { SITE, absoluteUrl } from '@/lib/site-config';
-import { getArticleBySlug, getRelatedArticles } from '@/server/queries';
 
 import styles from './page.module.css';
-
-export const revalidate = 120;
 
 type PageProps = {
   params: Promise<{ kategori: string; slug: string }>;
 };
 
+export function generateStaticParams() {
+  return getArticles().map((article) => ({
+    kategori: article.category.slug,
+    slug: article.slug,
+  }));
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getArticleBySlug(slug);
+  const article = getArticleBySlug(slug);
 
   if (!article) return { title: 'Haber bulunamadı' };
 
@@ -38,44 +40,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical },
+    alternates: { canonical: absoluteUrl(canonical) },
     openGraph: {
       type: 'article',
       title,
       description,
       url: absoluteUrl(canonical),
-      publishedTime: article.publishedAt ? toIsoString(article.publishedAt) : undefined,
-      modifiedTime: toIsoString(article.updatedAt),
+      publishedTime: article.publishedAt,
       authors: [article.authorName],
       section: article.category.name,
       tags: article.tags.map((tag) => tag.name),
-      images: article.coverImage ? [{ url: article.coverImage, alt: article.coverAlt || title }] : undefined,
+      images: article.coverImage
+        ? [{ url: absoluteUrl(article.coverImage), alt: article.coverAlt || title }]
+        : undefined,
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: article.coverImage ? [article.coverImage] : undefined,
+      images: article.coverImage ? [absoluteUrl(article.coverImage)] : undefined,
     },
   };
 }
 
 export default async function ArticlePage({ params }: PageProps) {
   const { kategori, slug } = await params;
-  const article = await getArticleBySlug(slug);
+  const article = getArticleBySlug(slug);
 
-  if (!article) notFound();
+  if (!article || article.category.slug !== kategori) notFound();
 
-  // Kategori değiştiyse eski adres kalıcı olarak yeni adrese yönlenir.
-  if (article.category.slug !== kategori) {
-    redirect(articleHref(article.category.slug, article.slug));
-  }
-
-  const [related, settings] = await Promise.all([
-    getRelatedArticles(article.id, article.category.id, 3),
-    getSettings(),
-  ]);
-
+  const related = getRelatedArticles(article, 3);
   const canonical = absoluteUrl(articleHref(article.category.slug, article.slug));
   const description = article.seoDescription || article.dek || truncate(article.plainText, 160);
 
@@ -86,9 +80,9 @@ export default async function ArticlePage({ params }: PageProps) {
         '@type': 'NewsArticle',
         headline: truncate(article.title, 110),
         description,
-        image: article.coverImage ? [article.coverImage] : undefined,
-        datePublished: article.publishedAt ? toIsoString(article.publishedAt) : undefined,
-        dateModified: toIsoString(article.updatedAt),
+        image: article.coverImage ? [absoluteUrl(article.coverImage)] : undefined,
+        datePublished: article.publishedAt,
+        dateModified: article.publishedAt,
         author: [{ '@type': 'Person', name: article.authorName }],
         publisher: {
           '@type': 'NewsMediaOrganization',
@@ -119,7 +113,6 @@ export default async function ArticlePage({ params }: PageProps) {
   return (
     <>
       <ReadingProgress />
-      <ViewCounter articleId={article.id} />
 
       <script
         type="application/ld+json"
@@ -144,14 +137,10 @@ export default async function ArticlePage({ params }: PageProps) {
 
           <div className={styles.byline}>
             <span className={styles.author}>{article.authorName}</span>
-            {article.publishedAt && (
-              <>
-                <span aria-hidden="true">·</span>
-                <time dateTime={toIsoString(article.publishedAt)} className="tabular">
-                  {formatLongDate(article.publishedAt)}
-                </time>
-              </>
-            )}
+            <span aria-hidden="true">·</span>
+            <time dateTime={article.publishedAt} className="tabular">
+              {formatLongDate(article.publishedAt)}
+            </time>
             <span aria-hidden="true">·</span>
             <span className="tabular">{article.readMins} dk okuma</span>
           </div>
@@ -165,18 +154,16 @@ export default async function ArticlePage({ params }: PageProps) {
               width={1200}
               height={675}
               priority
-              sizes="(max-width: 48rem) 100vw, 760px"
               className={styles.coverImage}
             />
-            {article.coverAlt && <figcaption className={styles.caption}>{article.coverAlt}</figcaption>}
+            {article.coverAlt && (
+              <figcaption className={styles.caption}>{article.coverAlt}</figcaption>
+            )}
           </figure>
         )}
 
-        {/* Gövde kaydedilirken sanitize edilir; burada güvenli HTML basılır. */}
-        <div
-          className={styles.body}
-          dangerouslySetInnerHTML={{ __html: article.body }}
-        />
+        {/* Markdown derleme anında HTML'e çevrilip sanitize edilir. */}
+        <div className={styles.body} dangerouslySetInnerHTML={{ __html: article.html }} />
 
         {article.tags.length > 0 && (
           <nav className={styles.tags} aria-label="Etiketler">
@@ -204,14 +191,10 @@ export default async function ArticlePage({ params }: PageProps) {
 
             <div className={styles.relatedGrid}>
               {related.map((item) => (
-                <ArticleCard key={item.id} article={item} />
+                <ArticleCard key={item.slug} article={item} />
               ))}
             </div>
           </section>
-        )}
-
-        {settings.commentsEnabled && (
-          <CommentSection articleId={article.id} moderated={settings.commentsModerated} />
         )}
       </article>
     </>

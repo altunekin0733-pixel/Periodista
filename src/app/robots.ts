@@ -2,17 +2,11 @@ import type { MetadataRoute } from 'next';
 
 import { absoluteUrl } from '@/lib/site-config';
 
+export const dynamic = 'force-static';
+
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        // Yönetim ve arama sonuçları dizine eklenmez.
-        disallow: ['/admin', '/giris', '/api/', '/arama'],
-      },
-    ],
-    sitemap: [absoluteUrl('/sitemap.xml'), absoluteUrl('/haber-sitemap.xml')],
-    host: absoluteUrl('/'),
+    rules: [{ userAgent: '*', allow: '/', disallow: ['/arama'] }],
+    sitemap: absoluteUrl('/sitemap.xml'),
   };
 }

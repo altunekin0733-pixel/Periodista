@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { CategoryIcon } from '@/components/ui/Icon';
 import { categoryHref } from '@/lib/routes';
-import type { ArticleCard as ArticleCardData } from '@/server/queries';
+import type { Article as ArticleCardData } from '@/lib/content';
 
 import { ArticleCard } from './ArticleCard';
 import styles from './CategorySection.module.css';
@@ -41,7 +41,7 @@ export function CategorySection({ category, articles }: CategorySectionProps) {
         </div>
 
         {rest.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+          <ArticleCard key={article.slug} article={article} />
         ))}
       </div>
     </section>

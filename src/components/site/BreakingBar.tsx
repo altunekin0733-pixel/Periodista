@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
+import { getBreakingArticles } from '@/lib/content';
 import { articleHref } from '@/lib/routes';
-import { getBreakingArticles } from '@/server/queries';
 
 import styles from './BreakingBar.module.css';
 
-export async function BreakingBar() {
-  const articles = await getBreakingArticles(6);
+export function BreakingBar() {
+  const articles = getBreakingArticles(6);
 
   if (articles.length === 0) return null;
 
@@ -23,7 +23,7 @@ export async function BreakingBar() {
             <div className={styles.group} key={copy} aria-hidden={copy === 1}>
               {articles.map((article) => (
                 <Link
-                  key={`${copy}-${article.id}`}
+                  key={`${copy}-${article.slug}`}
                   href={articleHref(article.category.slug, article.slug)}
                   className={styles.item}
                   tabIndex={copy === 1 ? -1 : undefined}

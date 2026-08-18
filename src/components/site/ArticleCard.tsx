@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { formatShortDate, toIsoString } from '@/lib/format';
 import { articleHref } from '@/lib/routes';
-import type { ArticleCard as ArticleCardData } from '@/server/queries';
+import type { Article as ArticleCardData } from '@/lib/content';
 
 import styles from './ArticleCard.module.css';
 

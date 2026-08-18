@@ -1,0 +1,66 @@
+[
+  {
+    "slug": "gundem",
+    "ad": "Gündem",
+    "simge": "newspaper",
+    "aciklama": "Ülke ve şehir gündeminden öne çıkan gelişmeler.",
+    "sira": 0,
+    "logo": "default"
+  },
+  {
+    "slug": "spor",
+    "ad": "Spor",
+    "simge": "sports_soccer",
+    "aciklama": "Sahadan sahaya, güncel spor gelişmeleri.",
+    "sira": 1,
+    "logo": "sports"
+  },
+  {
+    "slug": "dunya",
+    "ad": "Dünya",
+    "simge": "public",
+    "aciklama": "Küresel siyaset ve dış politikadan seçmeler.",
+    "sira": 2,
+    "logo": "default"
+  },
+  {
+    "slug": "ekonomi",
+    "ad": "Ekonomi",
+    "simge": "trending_up",
+    "aciklama": "Piyasalar, para politikası ve iş dünyası.",
+    "sira": 3,
+    "logo": "default"
+  },
+  {
+    "slug": "teknoloji",
+    "ad": "Teknoloji",
+    "simge": "memory",
+    "aciklama": "Yazılım, donanım ve yapay zekâdan gelişmeler.",
+    "sira": 4,
+    "logo": "default"
+  },
+  {
+    "slug": "kultur-sanat",
+    "ad": "Kültür-Sanat",
+    "simge": "theater_comedy",
+    "aciklama": "Sahne, sinema ve sanattan öne çıkanlar.",
+    "sira": 5,
+    "logo": "default"
+  },
+  {
+    "slug": "yasam",
+    "ad": "Yaşam",
+    "simge": "eco",
+    "aciklama": "Şehir hayatı, sağlık ve günlük yaşam.",
+    "sira": 6,
+    "logo": "default"
+  },
+  {
+    "slug": "podcast",
+    "ad": "Podcast",
+    "simge": "mic",
+    "aciklama": "Periodista seslerinden haftalık bölümler.",
+    "sira": 7,
+    "logo": "default"
+  }
+]

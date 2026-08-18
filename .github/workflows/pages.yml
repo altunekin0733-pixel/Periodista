@@ -1,0 +1,66 @@
+name: GitHub Pages'e yayınla
+
+on:
+  push:
+    branches: [statik-site]
+  # Panelden elle de tetiklenebilir.
+  workflow_dispatch:
+
+# Pages'e yazabilmek için gereken izinler.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Aynı anda tek yayın çalışsın; sıradaki tetikler beklesin.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  derle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Bağımlılıklar
+        run: npm ci
+
+      - name: Denetimler
+        run: |
+          npm run typecheck
+          npm run lint
+
+      - uses: actions/configure-pages@v5
+        id: pages
+
+      - name: Derle
+        env:
+          # Proje sitesi alt yolda yayınlandığı için ön ek gerekir.
+          # Kendi alan adınızı bağlarsanız bu iki satırı güncelleyin.
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
+        run: npm run build
+
+      - name: Jekyll işlemesini kapat
+        # Alt çizgiyle başlayan Next.js klasörleri (_next) aksi halde yok sayılır.
+        run: touch out/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  yayinla:
+    needs: derle
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

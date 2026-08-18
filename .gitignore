@@ -41,9 +41,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# prisma generated client (build sırasında üretilir)
-/src/generated/
-
 # tasarım arşivi ve Claude Design yükleme önbelleği (tasarım dosyalarınca kullanılmıyor)
 /design-reference/*.zip
 /design-reference/canvas/uploads/
+
+# statik dışa aktarım çıktısı
+/out/
