@@ -43,6 +43,11 @@ export async function POST(request: Request) {
 
     console.error('Görsel yüklenemedi', error);
 
-    return NextResponse.json({ error: 'Görsel yüklenemedi.' }, { status: 500 });
+    // Bu uç noktaya yalnızca oturum açmış yönetici erişebiliyor; kendi
+    // sistemindeki arızayı teşhis edebilmesi için sebebi gizlemiyoruz.
+    // Yığın izi değil, yalnızca hata mesajı döner.
+    const reason = error instanceof Error ? error.message : 'bilinmeyen hata';
+
+    return NextResponse.json({ error: `Görsel yüklenemedi: ${reason}` }, { status: 500 });
   }
 }
