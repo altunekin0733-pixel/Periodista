@@ -17,13 +17,18 @@ export type UploadResult = { url: string; contentType: string; size: number };
 export class UploadError extends Error {}
 
 /**
- * Vercel'de önerilen kimlik doğrulama OIDC'dir: SDK, `BLOB_STORE_ID` ile
- * `VERCEL_OIDC_TOKEN` çiftini kendisi kullanır. OIDC token'ı her dağıtımda
- * yenilendiği için sızma riski taşımaz — bu yüzden uzun ömürlü statik
- * token'a yalnızca OIDC yoksa düşeriz (örn. Vercel dışında çalışırken).
+ * Vercel'de önerilen kimlik doğrulama OIDC'dir; uzun ömürlü statik token
+ * tutmaya gerek kalmaz. Ancak token'ın nereden geldiği çalışma bağlamına göre
+ * değişir:
+ *
+ *  - Derleme sırasında  → `process.env.VERCEL_OIDC_TOKEN`
+ *  - Çalışma anında     → isteğin `x-vercel-oidc-token` başlığı
+ *
+ * Bu yüzden başlıktan okunan değeri çağıran taraf geçirir; ortam değişkeni
+ * yalnızca yedek yoldur.
  */
-function canUseOidc(): boolean {
-  return Boolean(process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN);
+function resolveOidcToken(fromRequest?: string | null): string | null {
+  return fromRequest || process.env.VERCEL_OIDC_TOKEN || null;
 }
 
 /**
@@ -55,7 +60,10 @@ function listBlobVariables(): string {
  * Görselleri Vercel Blob'a yükler. Vercel'de dosya sistemi yazılabilir
  * olmadığı için tek geçerli yol budur; token yoksa net bir hata veririz.
  */
-export async function uploadImage(file: File): Promise<UploadResult> {
+export async function uploadImage(
+  file: File,
+  options: { oidcToken?: string | null } = {},
+): Promise<UploadResult> {
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type as (typeof ACCEPTED_IMAGE_TYPES)[number])) {
     throw new UploadError('Yalnızca JPG, PNG, WebP veya AVIF yükleyebilirsiniz.');
   }
@@ -68,7 +76,9 @@ export async function uploadImage(file: File): Promise<UploadResult> {
     throw new UploadError('Boş dosya yüklenemez.');
   }
 
-  const useOidc = canUseOidc();
+  const storeId = process.env.BLOB_STORE_ID;
+  const oidcToken = resolveOidcToken(options.oidcToken);
+  const useOidc = Boolean(storeId && oidcToken);
   const token = useOidc ? null : resolveBlobToken();
 
   if (!useOidc && !token) {
@@ -86,7 +96,8 @@ export async function uploadImage(file: File): Promise<UploadResult> {
     access: 'public',
     contentType: file.type,
     addRandomSuffix: true,
-    // OIDC varken token geçilmez; SDK kısa ömürlü kimliği kendisi kullanır.
+    // OIDC varken kısa ömürlü kimlik kullanılır; statik token yalnızca yedek.
+    ...(useOidc ? { oidcToken: oidcToken as string, storeId: storeId as string } : {}),
     ...(token ? { token } : {}),
   });
 

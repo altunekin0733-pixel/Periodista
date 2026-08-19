@@ -30,7 +30,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await uploadImage(file);
+    // Çalışma anında OIDC token'ı ortam değişkeninde değil, istek başlığında gelir.
+    const result = await uploadImage(file, {
+      oidcToken: request.headers.get('x-vercel-oidc-token'),
+    });
 
     return NextResponse.json(result);
   } catch (error) {
