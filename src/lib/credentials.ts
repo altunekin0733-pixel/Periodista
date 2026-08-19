@@ -12,7 +12,7 @@ const BCRYPT_PREFIX = /^\$2[aby]\$/;
 
 export type CredentialCheck =
   | { ok: true; username: string }
-  | { ok: false; reason: 'not-configured' | 'invalid' };
+  | { ok: false; reason: 'not-configured' | 'not-hashed' | 'invalid' };
 
 export async function verifyCredentials(
   username: string,
@@ -21,8 +21,14 @@ export async function verifyCredentials(
   const expectedUsername = process.env.ADMIN_USERNAME;
   const passwordHash = process.env.ADMIN_PASSWORD_HASH;
 
-  if (!expectedUsername || !passwordHash || !BCRYPT_PREFIX.test(passwordHash)) {
+  if (!expectedUsername || !passwordHash) {
     return { ok: false, reason: 'not-configured' };
+  }
+
+  // Sık yapılan hata: ham şifre yapıştırmak. Bunu "hiç ayarlanmamış" saymak
+  // yanıltıcı olduğu için ayrı bir durum olarak bildiriyoruz.
+  if (!BCRYPT_PREFIX.test(passwordHash)) {
+    return { ok: false, reason: 'not-hashed' };
   }
 
   // Kullanıcı adı yanlış olsa bile hash karşılaştırması yapılır; böylece

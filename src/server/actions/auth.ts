@@ -46,6 +46,13 @@ export async function login(_previous: LoginState, formData: FormData): Promise<
       };
     }
 
+    if (result.reason === 'not-hashed') {
+      return {
+        error:
+          'ADMIN_PASSWORD_HASH ham şifre içeriyor. Bu alana şifrenin kendisi değil, `npm run admin:hash -- "sifreniz"` komutunun ürettiği $2b$ ile başlayan özet yazılmalı.',
+      };
+    }
+
     // Hangi alanın yanlış olduğu belirtilmez.
     return { error: 'Kullanıcı adı veya şifre hatalı.' };
   }
