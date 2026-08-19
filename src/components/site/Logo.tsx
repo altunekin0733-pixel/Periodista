@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 
 import { SITE, assetPath } from '@/lib/site-config';
 
@@ -21,9 +22,12 @@ const VARIANTS = {
   sports: { src: '/marka/logo-sports-black.png', width: 1319, height: 423 },
 } as const;
 
-export function Logo({ variant = 'default', height = 40, priority = false, href = '/' }: LogoProps) {
+export function Logo({ variant = 'default', height = 36, priority = false, href = '/' }: LogoProps) {
   const asset = VARIANTS[variant as keyof typeof VARIANTS] ?? VARIANTS.default;
   const width = Math.round((asset.width / asset.height) * height);
+
+  // İstenen yükseklik CSS'e değişken olarak geçer; boyutlandırma tek yerde kalır.
+  const sizing = { '--logo-height': `${height}px` } as CSSProperties;
 
   const image = (
     <Image
@@ -38,11 +42,20 @@ export function Logo({ variant = 'default', height = 40, priority = false, href 
   );
 
   if (!href) {
-    return <span className={styles.wrapper}>{image}</span>;
+    return (
+      <span className={styles.wrapper} style={sizing}>
+        {image}
+      </span>
+    );
   }
 
   return (
-    <Link href={href} className={styles.wrapper} aria-label={`${SITE.name} ana sayfa`}>
+    <Link
+      href={href}
+      className={styles.wrapper}
+      style={sizing}
+      aria-label={`${SITE.name} ana sayfa`}
+    >
       {image}
     </Link>
   );

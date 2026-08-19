@@ -2,15 +2,20 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  /* Yükseklik bileşenden gelir; genişlik en-boy oranına göre serbesttir. */
+  height: var(--logo-height, 36px);
 }
 
 .image {
+  height: 100%;
   width: auto;
-  height: auto;
-  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
   /* Koyu tema varsayılan olduğu için siyah logo beyaza çevrilir. */
   filter: invert(1);
-  transition: filter var(--dur) var(--ease-out);
+  transition:
+    filter var(--dur) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
 }
 
 [data-theme='light'] .image {
@@ -19,4 +24,11 @@
 
 .wrapper:hover .image {
   opacity: 0.85;
+}
+
+/* Dar ekranda başlık kalabalıklaşmasın diye logo bir tık küçülür. */
+@media (max-width: 30rem) {
+  .wrapper {
+    height: calc(var(--logo-height, 36px) * 0.85);
+  }
 }
