@@ -48,6 +48,14 @@ export async function POST(request: Request) {
     // Yığın izi değil, yalnızca hata mesajı döner.
     const reason = error instanceof Error ? error.message : 'bilinmeyen hata';
 
-    return NextResponse.json({ error: `Görsel yüklenemedi: ${reason}` }, { status: 500 });
+    // Depo kimliği bir sır değil, yalnızca tanımlayıcıdır. Hangi depoya
+    // yazmaya çalışıldığını göstermek, "depo yok" gibi hataların kaynağını
+    // (eski dağıtım mı, yanlış bağlantı mı) tek bakışta ayırt ettirir.
+    const storeId = process.env.BLOB_STORE_ID ?? 'tanımsız';
+
+    return NextResponse.json(
+      { error: `Görsel yüklenemedi: ${reason} (kullanılan depo: ${storeId})` },
+      { status: 500 },
+    );
   }
 }
