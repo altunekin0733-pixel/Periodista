@@ -73,3 +73,12 @@ export function formatCount(value: number): string {
 export function toIsoString(value: Date | string): string {
   return new Date(value).toISOString();
 }
+
+/** `03:35` — piyasa şeridinde verinin ait olduğu saat. */
+export function formatTimeOfDay(value: Date | string): string {
+  return new Intl.DateTimeFormat(LOCALE, {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: TIME_ZONE,
+  }).format(new Date(value));
+}

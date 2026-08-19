@@ -92,3 +92,11 @@
   }
 }
 
+
+/* Verinin ait olduğu saat — bayatlık şeffaf olsun diye şeritte gösterilir. */
+.stamp {
+  color: var(--fg-muted);
+  font-size: 0.6875rem;
+  font-style: italic;
+  white-space: nowrap;
+}

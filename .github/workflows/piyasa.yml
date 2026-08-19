@@ -1,0 +1,41 @@
+name: Piyasa verisini güncelle
+
+on:
+  schedule:
+    # Yarım saatte bir. Kaynak servis aralıklı bozuk yanıt döndüğü için
+    # betik çok denemeli çalışır; alamazsa dosyaya dokunmaz.
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: piyasa
+  cancel-in-progress: true
+
+jobs:
+  guncelle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Veriyi çek
+        run: node scripts/piyasa-guncelle.mjs
+
+      - name: Değiştiyse kaydet
+        # Bu commit, sayfa yayın akışını (pages.yml) kendiliğinden tetikler.
+        run: |
+          if git diff --quiet -- content/piyasa.json; then
+            echo "Veri değişmedi, commit atılmıyor."
+            exit 0
+          fi
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add content/piyasa.json
+          git commit -m 'chore: piyasa verisi güncellendi'
+          git push

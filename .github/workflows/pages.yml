@@ -3,9 +3,6 @@ name: GitHub Pages'e yayınla
 on:
   push:
     branches: [main]
-  # Piyasa verisi derleme anında gömüldüğü için düzenli tazeleme gerekir.
-  schedule:
-    - cron: '*/30 * * * *'
   # Panelden elle de tetiklenebilir.
   workflow_dispatch:
 

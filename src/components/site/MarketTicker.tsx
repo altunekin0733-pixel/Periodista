@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
-import { formatChange, formatShortDate } from '@/lib/format';
+import { formatChange, formatTimeOfDay } from '@/lib/format';
 import { getRates, type RateItem } from '@/lib/rates';
 
 import styles from './MarketTicker.module.css';
@@ -26,8 +26,8 @@ function RateChip({ item }: { item: RateItem }) {
  * Veriler derleme anında gömülür; şerit ilk boyamada hazırdır ve sayfayı
  * sonradan itmez. Tazeleme, zamanlanmış yeniden derlemeyle olur.
  */
-export async function MarketTicker() {
-  const { items, updatedAt } = await getRates();
+export function MarketTicker() {
+  const { items, updatedAt } = getRates();
 
   if (items.length === 0) return null;
 
@@ -40,7 +40,7 @@ export async function MarketTicker() {
             {item.label}: {item.formatted}
           </li>
         ))}
-        {updatedAt && <li>Son güncelleme: {formatShortDate(updatedAt)}</li>}
+        {updatedAt && <li>Son güncelleme: {formatTimeOfDay(updatedAt)}</li>}
       </ul>
 
       <div className={styles.viewport} aria-hidden="true">
@@ -51,6 +51,11 @@ export async function MarketTicker() {
               {items.map((item) => (
                 <RateChip key={`${copy}-${item.key}`} item={item} />
               ))}
+              {updatedAt && (
+                <span className={styles.chip}>
+                  <span className={styles.stamp}>{formatTimeOfDay(updatedAt)} itibarıyla</span>
+                </span>
+              )}
             </div>
           ))}
         </div>

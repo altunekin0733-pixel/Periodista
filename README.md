@@ -190,7 +190,8 @@ npm run preview      # out/ klasörünü sunar
 content/
 ├── haberler/*.md        # haberler — içerik buraya
 ├── kategoriler.json
-└── ayarlar.json
+├── ayarlar.json
+└── piyasa.json          # piyasa verisi (otomatik güncellenir, elle düzenlemeyin)
 
 src/
 ├── app/
@@ -205,7 +206,9 @@ src/
 │   └── rates.ts         # piyasa verisi (tarayıcıdan)
 └── styles/tokens.css    # tasarım token'ları
 
-.github/workflows/pages.yml   # otomatik yayın
+.github/workflows/
+├── pages.yml            # otomatik derleme ve yayın
+└── piyasa.yml           # piyasa verisini tazeler (30 dk)
 design-reference/             # özgün tasarım dosyaları
 ```
 
@@ -217,12 +220,14 @@ design-reference/             # özgün tasarım dosyaları
   sonra yayınlanır.
 - **Arama indeksi sayfaya gömülür.** Haber sayısı birkaç bini aştığında arama
   sayfası ağırlaşır; o noktada indeksi ayrı bir dosyaya taşımak gerekir.
-- **Piyasa verisi 30 dakikaya kadar gecikmeli.** Veri kaynağı (Truncgil)
-  HTTP/2 akışını hatalı kapattığı için tarayıcıdan çağrılamıyor —
-  `ERR_HTTP2_PROTOCOL_ERROR` veriyor. Bu yüzden veri derleme anında çekilip
-  HTML'e gömülüyor ve `.github/workflows/pages.yml` içindeki zamanlanmış görev
-  (`*/30 * * * *`) ile tazeleniyor. Veri hiç alınamazsa şerit gizlenir; eski
-  değer gösterilmez.
+- **Piyasa verisi 30 dakikaya kadar gecikmeli.** Kaynak servis (Truncgil) iki
+  ayrı sorun çıkarıyor: tarayıcıdan çağrıldığında HTTP/2 akışını hatalı
+  kapatıyor (`ERR_HTTP2_PROTOCOL_ERROR`), sunucudan çağrıldığında ise rastgele
+  bozuk JSON dönebiliyor. Bu yüzden veri ne tarayıcıda ne de derleme sırasında
+  çekilir; ayrı bir zamanlanmış iş (`.github/workflows/piyasa.yml`) çok
+  denemeli olarak veriyi alıp `content/piyasa.json` dosyasına yazar, derleme de
+  yalnızca bu dosyayı okur. Veri alınamazsa dosyaya dokunulmaz ve site son iyi
+  bilinen değerlerle yayında kalır. Şeritte verinin ait olduğu saat gösterilir.
 - **Zamanlanmış görev 60 gün hareketsizlikte durur.** GitHub, uzun süre commit
   almayan depolarda cron'u devre dışı bırakır. Actions sekmesinden tek tıkla
   yeniden etkinleştirilir.
