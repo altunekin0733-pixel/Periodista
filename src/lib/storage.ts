@@ -17,6 +17,31 @@ export type UploadResult = { url: string; contentType: string; size: number };
 export class UploadError extends Error {}
 
 /**
+ * Vercel Blob normalde `BLOB_READ_WRITE_TOKEN` üretir, ancak depo bağlanırken
+ * özel bir ön ek verilmişse ad değişir (örn. `GORSEL_READ_WRITE_TOKEN`).
+ * Bu yüzden önce standart adı, sonra aynı deseni taşıyan diğerlerini ararız.
+ */
+function resolveBlobToken(): string | null {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return process.env.BLOB_READ_WRITE_TOKEN;
+
+  const fallback = Object.keys(process.env)
+    .filter((name) => name.endsWith('_READ_WRITE_TOKEN'))
+    .map((name) => process.env[name])
+    .find((value) => Boolean(value));
+
+  return fallback ?? null;
+}
+
+/** Hata mesajında hangi Blob değişkenlerinin var olduğunu göstermek için. */
+function listBlobVariables(): string {
+  const names = Object.keys(process.env).filter(
+    (name) => name.includes('BLOB') || name.endsWith('_READ_WRITE_TOKEN'),
+  );
+
+  return names.length > 0 ? names.join(', ') : 'hiçbiri';
+}
+
+/**
  * Görselleri Vercel Blob'a yükler. Vercel'de dosya sistemi yazılabilir
  * olmadığı için tek geçerli yol budur; token yoksa net bir hata veririz.
  */
@@ -33,9 +58,13 @@ export async function uploadImage(file: File): Promise<UploadResult> {
     throw new UploadError('Boş dosya yüklenemez.');
   }
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  const token = resolveBlobToken();
+
+  if (!token) {
     throw new UploadError(
-      'Görsel deposu yapılandırılmamış. Vercel panelinde Storage → Blob oluşturup projeye bağlayın (BLOB_READ_WRITE_TOKEN).',
+      'Görsel deposu yapılandırılmamış: BLOB_READ_WRITE_TOKEN bulunamadı. ' +
+        'Vercel panelinde Storage → Blob oluşturup projeye bağlayın, sonra Redeploy edin. ' +
+        `Bu dağıtımda görünen ilgili değişkenler: ${listBlobVariables()}.`,
     );
   }
 
@@ -46,6 +75,7 @@ export async function uploadImage(file: File): Promise<UploadResult> {
     access: 'public',
     contentType: file.type,
     addRandomSuffix: true,
+    token,
   });
 
   return { url: blob.url, contentType: file.type, size: file.size };
