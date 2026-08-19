@@ -229,7 +229,8 @@ design-reference/             # özgün tasarım dosyaları
   bozuk JSON dönebiliyor. Bu yüzden veri ne tarayıcıda ne de derleme sırasında
   çekilir; yayın akışı (`.github/workflows/pages.yml`) her çalıştığında
   `scripts/piyasa-guncelle.mjs` çok denemeli olarak veriyi alıp
-  `content/piyasa.json` dosyasına yazar, derleme de yalnızca bu dosyayı okur. Veri alınamazsa dosyaya dokunulmaz ve site son iyi
+  `content/piyasa.json` dosyasına yazar, derleme de yalnızca bu dosyayı okur.
+  Son iyi bilinen değer Actions önbelleğinde taşınır (depoya commit atılmaz). Veri alınamazsa dosyaya dokunulmaz ve site son iyi
   bilinen değerlerle yayında kalır. Şeritte verinin ait olduğu saat gösterilir.
 - **Zamanlanmış görev 60 gün hareketsizlikte durur.** GitHub, uzun süre commit
   almayan depolarda cron'u devre dışı bırakır. Actions sekmesinden tek tıkla

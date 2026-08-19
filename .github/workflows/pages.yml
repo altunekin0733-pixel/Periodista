@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -34,23 +34,26 @@ jobs:
       - name: Bağımlılıklar
         run: npm ci
 
+      # Son iyi bilinen piyasa verisi commit yerine önbellekte taşınır.
+      # Commit atmak depoya gürültü eklerdi ve her seferinde GitHub'ın eski
+      # Jekyll derleyicisini tetikleyerek yayınlanan siteyi ezme riski yaratırdı.
+      - name: Önceki piyasa verisini geri yükle
+        uses: actions/cache/restore@v4
+        with:
+          path: content/piyasa.json
+          key: piyasa-${{ github.run_id }}
+          restore-keys: piyasa-
+
       - name: Piyasa verisini tazele
         # Betik yalnızca geçerli veri aldığında dosyayı değiştirir; alamazsa
         # son iyi bilinen değerler korunur ve derleme yine de sürer.
         run: node scripts/piyasa-guncelle.mjs
 
-      - name: Piyasa verisi değiştiyse kaydet
-        # Commit yalnızca kalıcılık içindir; bu çalışma zaten güncel dosyayla derler.
-        run: |
-          if git diff --quiet -- content/piyasa.json; then
-            echo "Piyasa verisi değişmedi."
-            exit 0
-          fi
-          git config user.name  'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add content/piyasa.json
-          git commit -m 'chore: piyasa verisi güncellendi'
-          git push
+      - name: Piyasa verisini sakla
+        uses: actions/cache/save@v4
+        with:
+          path: content/piyasa.json
+          key: piyasa-${{ github.run_id }}
 
       - name: Denetimler
         run: |
