@@ -139,6 +139,11 @@ piyasa şeridinin açık/kapalı durumu.
 2. **Source** olarak **GitHub Actions** seçin (Branch değil)
 3. `main` dalına yapılan her push otomatik yayınlar
 
+> **Bu ayar zorunludur.** "Deploy from a branch" seçili kaldığı sürece GitHub
+> kendi Jekyll derleyicisini çalıştırır ve `README.md` dosyasını site olarak
+> yayınlar — Actions'ın ürettiği gerçek siteyi ezer. Ayar yalnızca depo
+> sahibinin (admin) değiştirebileceği bir yerdedir.
+
 Yayın adresi: `https://<kullanici>.github.io/Periodista/`
 
 ### Kendi alan adınızı bağlama
@@ -206,9 +211,7 @@ src/
 │   └── rates.ts         # piyasa verisi (tarayıcıdan)
 └── styles/tokens.css    # tasarım token'ları
 
-.github/workflows/
-├── pages.yml            # otomatik derleme ve yayın
-└── piyasa.yml           # piyasa verisini tazeler (30 dk)
+.github/workflows/pages.yml   # derleme, yayın ve piyasa verisi tazeleme
 design-reference/             # özgün tasarım dosyaları
 ```
 
@@ -224,9 +227,9 @@ design-reference/             # özgün tasarım dosyaları
   ayrı sorun çıkarıyor: tarayıcıdan çağrıldığında HTTP/2 akışını hatalı
   kapatıyor (`ERR_HTTP2_PROTOCOL_ERROR`), sunucudan çağrıldığında ise rastgele
   bozuk JSON dönebiliyor. Bu yüzden veri ne tarayıcıda ne de derleme sırasında
-  çekilir; ayrı bir zamanlanmış iş (`.github/workflows/piyasa.yml`) çok
-  denemeli olarak veriyi alıp `content/piyasa.json` dosyasına yazar, derleme de
-  yalnızca bu dosyayı okur. Veri alınamazsa dosyaya dokunulmaz ve site son iyi
+  çekilir; yayın akışı (`.github/workflows/pages.yml`) her çalıştığında
+  `scripts/piyasa-guncelle.mjs` çok denemeli olarak veriyi alıp
+  `content/piyasa.json` dosyasına yazar, derleme de yalnızca bu dosyayı okur. Veri alınamazsa dosyaya dokunulmaz ve site son iyi
   bilinen değerlerle yayında kalır. Şeritte verinin ait olduğu saat gösterilir.
 - **Zamanlanmış görev 60 gün hareketsizlikte durur.** GitHub, uzun süre commit
   almayan depolarda cron'u devre dışı bırakır. Actions sekmesinden tek tıkla
