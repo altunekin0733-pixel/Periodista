@@ -1,47 +1,47 @@
 {
-  "updatedAt": "2026-08-19T05:17:01.000Z",
+  "updatedAt": "2026-08-19T07:26:01.000Z",
   "items": [
     {
       "key": "USD",
       "label": "USD/TRY",
-      "value": 47.9456,
+      "value": 47.9413,
       "digits": 2,
-      "change": 0.05
+      "change": 0.06
     },
     {
       "key": "EUR",
       "label": "EUR/TRY",
-      "value": 55.6059,
-      "digits": 2,
-      "change": 0.15
-    },
-    {
-      "key": "GBP",
-      "label": "GBP/TRY",
-      "value": 64.9793,
-      "digits": 2,
-      "change": 0.13
-    },
-    {
-      "key": "CHF",
-      "label": "CHF/TRY",
-      "value": 59.1262,
+      "value": 55.6289,
       "digits": 2,
       "change": 0.23
     },
     {
+      "key": "GBP",
+      "label": "GBP/TRY",
+      "value": 65.0139,
+      "digits": 2,
+      "change": 0.2
+    },
+    {
+      "key": "CHF",
+      "label": "CHF/TRY",
+      "value": 59.1542,
+      "digits": 2,
+      "change": 0.28
+    },
+    {
       "key": "JPY",
       "label": "JPY/TRY",
-      "value": 0.003015,
+      "value": 0.003017,
       "digits": 4,
       "change": 0
     },
     {
       "key": "GRA",
       "label": "Gram Altın",
-      "value": 6686.81,
+      "value": 6711.5,
       "digits": 2,
-      "change": 0.15
+      "change": 0.52
     },
     {
       "key": "CEYREKALTIN",
@@ -53,16 +53,16 @@
     {
       "key": "GUMUS",
       "label": "Gram Gümüş",
-      "value": 96.53,
+      "value": 97.45,
       "digits": 2,
-      "change": -1.1
+      "change": -0.17
     },
     {
       "key": "XU100",
       "label": "BIST 100",
-      "value": 14127.98,
+      "value": 14120.04,
       "digits": 2,
-      "change": -0.03
+      "change": -0.06
     }
   ]
 }
