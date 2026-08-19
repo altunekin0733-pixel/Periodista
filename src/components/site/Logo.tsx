@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { SITE } from '@/lib/site-config';
+import { SITE, assetPath } from '@/lib/site-config';
 
 import styles from './Logo.module.css';
 
@@ -27,7 +27,7 @@ export function Logo({ variant = 'default', height = 40, priority = false, href 
 
   const image = (
     <Image
-      src={asset.src}
+      src={assetPath(asset.src)}
       alt={SITE.name}
       width={width}
       height={height}

@@ -11,7 +11,7 @@ type SiteChromeProps = {
 };
 
 /** Site kabuğu: son dakika şeridi, piyasa ticker'ı, başlık ve altbilgi. */
-export function SiteChrome({ children, logoVariant = 'default' }: SiteChromeProps) {
+export async function SiteChrome({ children, logoVariant = 'default' }: SiteChromeProps) {
   const settings = getSettings();
 
   return (

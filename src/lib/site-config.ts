@@ -32,6 +32,22 @@ export function absoluteUrl(path: string): string {
   return `${getSiteOrigin()}${BASE_PATH}${suffix}`;
 }
 
+/**
+ * `public/` altındaki bir dosyanın gerçek adresi.
+ *
+ * `next/image` `unoptimized` modda src'ye basePath eklemez (optimizasyon
+ * yapmadığı için varsayılan yükleyici devre dışı kalır). Alt yolda yayınlanan
+ * bir sitede bu, tüm görsellerin 404 vermesi demektir — o yüzden ön eki
+ * burada elle ekliyoruz. Dış adresler olduğu gibi geçer.
+ */
+export function assetPath(path: string): string {
+  if (/^(https?:)?\/\//i.test(path) || path.startsWith('data:')) return path;
+
+  const suffix = path.startsWith('/') ? path : `/${path}`;
+
+  return `${BASE_PATH}${suffix}`;
+}
+
 export const SOCIAL_PLATFORMS = [
   { key: 'instagram', name: 'Instagram' },
   { key: 'x', name: 'X' },

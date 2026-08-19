@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, Search, ShieldCheck, X } from 'lucide-react';
+import { Menu, Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
@@ -100,10 +100,6 @@ export function HeaderActions({ categories }: HeaderActionsProps) {
       </form>
 
       <ThemeToggle />
-
-      <Link href="/admin" className={styles.iconButton} title="Yönetim paneli" aria-label="Yönetim paneli">
-        <ShieldCheck size={17} aria-hidden="true" />
-      </Link>
 
       <button
         type="button"

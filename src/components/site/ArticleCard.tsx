@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { formatShortDate, toIsoString } from '@/lib/format';
 import { articleHref } from '@/lib/routes';
+import { assetPath } from '@/lib/site-config';
 import type { Article as ArticleCardData } from '@/lib/content';
 
 import styles from './ArticleCard.module.css';
@@ -36,7 +37,7 @@ export function ArticleCard({
       <Link href={href} className={styles.media} tabIndex={-1} aria-hidden="true">
         {article.coverImage ? (
           <Image
-            src={article.coverImage}
+            src={assetPath(article.coverImage)}
             alt=""
             fill
             sizes={IMAGE_SIZES[variant]}

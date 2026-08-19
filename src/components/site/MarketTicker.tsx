@@ -1,15 +1,9 @@
-'use client';
-
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
-import { formatChange } from '@/lib/format';
-import { fetchRates, type RateItem } from '@/lib/rates';
+import { formatChange, formatShortDate } from '@/lib/format';
+import { getRates, type RateItem } from '@/lib/rates';
 
 import styles from './MarketTicker.module.css';
-
-/** Sekme uzun süre açık kalırsa veriyi tazele. */
-const REFRESH_MS = 5 * 60 * 1000;
 
 function RateChip({ item }: { item: RateItem }) {
   const Arrow = item.direction === 'up' ? ArrowUp : ArrowDown;
@@ -28,29 +22,13 @@ function RateChip({ item }: { item: RateItem }) {
   );
 }
 
-export function MarketTicker() {
-  const [items, setItems] = useState<RateItem[]>([]);
+/**
+ * Veriler derleme anında gömülür; şerit ilk boyamada hazırdır ve sayfayı
+ * sonradan itmez. Tazeleme, zamanlanmış yeniden derlemeyle olur.
+ */
+export async function MarketTicker() {
+  const { items, updatedAt } = await getRates();
 
-  useEffect(() => {
-    const controller = new AbortController();
-    let timer = 0;
-
-    async function load() {
-      const next = await fetchRates(controller.signal);
-
-      if (!controller.signal.aborted) setItems(next);
-    }
-
-    void load();
-    timer = window.setInterval(() => void load(), REFRESH_MS);
-
-    return () => {
-      controller.abort();
-      window.clearInterval(timer);
-    };
-  }, []);
-
-  // Veri gelmeden şerit hiç çizilmez; boş bir kutu düzeni bozmasın.
   if (items.length === 0) return null;
 
   return (
@@ -62,6 +40,7 @@ export function MarketTicker() {
             {item.label}: {item.formatted}
           </li>
         ))}
+        {updatedAt && <li>Son güncelleme: {formatShortDate(updatedAt)}</li>}
       </ul>
 
       <div className={styles.viewport} aria-hidden="true">

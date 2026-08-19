@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { assetPath } from '@/lib/site-config';
+
 import styles from './HeroSlider.module.css';
 
 export type HeroSlide = {
@@ -92,7 +94,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
           >
             {slide.coverImage ? (
               <Image
-                src={slide.coverImage}
+                src={assetPath(slide.coverImage)}
                 alt={slide.coverAlt}
                 fill
                 sizes="(max-width: 64rem) 100vw, 720px"

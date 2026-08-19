@@ -11,7 +11,7 @@ import { getArticleBySlug, getArticles, getRelatedArticles } from '@/lib/content
 import { formatLongDate } from '@/lib/format';
 import { articleHref, categoryHref, tagHref } from '@/lib/routes';
 import { truncate } from '@/lib/sanitize';
-import { SITE, absoluteUrl } from '@/lib/site-config';
+import { SITE, absoluteUrl, assetPath } from '@/lib/site-config';
 
 import styles from './page.module.css';
 
@@ -149,7 +149,7 @@ export default async function ArticlePage({ params }: PageProps) {
         {article.coverImage && (
           <figure className={styles.cover}>
             <Image
-              src={article.coverImage}
+              src={assetPath(article.coverImage)}
               alt={article.coverAlt || article.title}
               width={1200}
               height={675}

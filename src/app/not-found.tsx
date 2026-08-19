@@ -9,7 +9,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function NotFound() {
+export default async function NotFound() {
   return (
     <SiteChrome>
       <div className="container">

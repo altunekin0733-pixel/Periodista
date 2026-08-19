@@ -19,7 +19,7 @@ olarak durur.
 | Ana sayfa (manşet karuseli, son dakika paneli, kategori blokları) | ✓ |
 | Kategori, haber ve etiket sayfaları | ✓ |
 | Arama | ✓ tarayıcı içinde, anlık, sunucusuz |
-| Piyasa şeridi (döviz, altın, BIST) | ✓ tarayıcıdan canlı çekilir |
+| Piyasa şeridi (döviz, altın, BIST) | ✓ derlemede gömülür, 30 dk'da bir tazelenir |
 | Koyu / açık tema | ✓ |
 | Paylaşım butonları, okuma ilerleme çubuğu | ✓ |
 | SEO: JSON-LD, OpenGraph, sitemap.xml, rss.xml, robots.txt | ✓ |
@@ -217,8 +217,15 @@ design-reference/             # özgün tasarım dosyaları
   sonra yayınlanır.
 - **Arama indeksi sayfaya gömülür.** Haber sayısı birkaç bini aştığında arama
   sayfası ağırlaşır; o noktada indeksi ayrı bir dosyaya taşımak gerekir.
-- **Piyasa verisi üçüncü taraf** (Truncgil). Servis kapanırsa şerit gizlenir.
-  Ticari kullanımda sağlayıcının şartlarını kontrol edin.
+- **Piyasa verisi 30 dakikaya kadar gecikmeli.** Veri kaynağı (Truncgil)
+  HTTP/2 akışını hatalı kapattığı için tarayıcıdan çağrılamıyor —
+  `ERR_HTTP2_PROTOCOL_ERROR` veriyor. Bu yüzden veri derleme anında çekilip
+  HTML'e gömülüyor ve `.github/workflows/pages.yml` içindeki zamanlanmış görev
+  (`*/30 * * * *`) ile tazeleniyor. Veri hiç alınamazsa şerit gizlenir; eski
+  değer gösterilmez.
+- **Zamanlanmış görev 60 gün hareketsizlikte durur.** GitHub, uzun süre commit
+  almayan depolarda cron'u devre dışı bırakır. Actions sekmesinden tek tıkla
+  yeniden etkinleştirilir.
 - **Bozuk bir markdown dosyası derlemeyi durdurur.** Bu bilinçlidir — hatalı
   dosya sessizce atlanıp haber kaybolmasın diye. Hata mesajı hangi dosyada ne
   sorun olduğunu söyler.
