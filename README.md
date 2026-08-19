@@ -133,8 +133,8 @@ cp .env.example .env
 `.env` dosyasını doldurun:
 
 ```bash
-# Yönetici şifresinin özetini üretin
-npm run admin:hash -- "cok-guclu-bir-sifre"
+# Yönetici şifresinin özetini üretin (şifre gizli olarak sorulur)
+npm run admin:hash
 
 # Oturum anahtarını üretin
 openssl rand -base64 32
@@ -220,7 +220,7 @@ npm run dev
 | `npm run db:deploy` | Bekleyen migration'ları uygular (üretim) |
 | `npm run db:seed` | Örnek kategori ve haberleri yükler |
 | `npm run db:studio` | Prisma Studio |
-| `npm run admin:hash -- "sifre"` | Yönetici şifre özeti üretir |
+| `npm run admin:hash` | Yönetici şifre özeti üretir (şifreyi gizli sorar) |
 
 ---
 
