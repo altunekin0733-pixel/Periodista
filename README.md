@@ -6,6 +6,22 @@ tarafı ve yönetim paneli tek uygulamada.
 > Tasarımın özgün Claude Design dosyaları `design-reference/canvas/` altında
 > referans olarak duruyor. Uygulama bu tasarımın çalışan karşılığıdır.
 
+## Depodaki iki sürüm
+
+Bu depo aynı tasarımın iki ayrı sürümünü barındırır:
+
+| Dal | Nerede yayınlanır | Ne var |
+|---|---|---|
+| `dinamik-vercel` | **Vercel** (üretim) | Yönetim paneli, PostgreSQL, yorumlar, e-bülten, görsel yükleme, anında yayın |
+| `main` | **GitHub Pages** | Tamamen statik; haberler markdown dosyası, panel yok |
+
+Bu dosya `dinamik-vercel` dalını anlatır. Vercel'de **Settings → Environments →
+Production → Branch Tracking** alanının `dinamik-vercel` olarak ayarlı olması
+gerekir; aksi halde Vercel statik sürümü yayınlar.
+
+İki sürüm ayrı içerik deposu kullandığı için içerikleri kendiliğinden
+eşleşmez — Vercel panelinden girilen haber, Pages'teki siteye yansımaz.
+
 ---
 
 ## İçindekiler
