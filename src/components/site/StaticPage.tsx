@@ -4,12 +4,15 @@ import Link from 'next/link';
 import { SocialIcon } from '@/components/ui/SocialIcon';
 import { getSettings, toSocialLinks } from '@/lib/settings';
 import { SITE, absoluteUrl } from '@/lib/site-config';
-import { getStaticPage } from '@/lib/static-pages';
+import { getStaticPageDefaults } from '@/lib/static-pages';
+import { getStaticPage } from '@/lib/static-pages-store';
 
 import styles from './StaticPage.module.css';
 
+/** Meta veri varsayılandan üretilir; panel düzenlemesi başlığı değiştirse de
+ *  arama motoru açıklaması ve kanonik adres sabit kalır. */
 export function staticPageMetadata(slug: string): Metadata {
-  const page = getStaticPage(slug);
+  const page = getStaticPageDefaults(slug);
 
   return {
     title: page.title,
@@ -37,8 +40,7 @@ function MastheadRow({ label, value }: { label: string; value: string }) {
 }
 
 export async function StaticPage({ slug }: { slug: string }) {
-  const page = getStaticPage(slug);
-  const settings = await getSettings();
+  const [page, settings] = await Promise.all([getStaticPage(slug), getSettings()]);
   const socials = toSocialLinks(settings);
 
   const hasMasthead =
@@ -75,25 +77,8 @@ export async function StaticPage({ slug }: { slug: string }) {
           </section>
         )}
 
-        {page.sections.map((section) => (
-          <section key={section.heading} className={styles.section}>
-            <h2 className={styles.sectionTitle}>{section.heading}</h2>
-
-            {section.paragraphs?.map((paragraph) => (
-              <p key={paragraph} className={styles.paragraph}>
-                {paragraph}
-              </p>
-            ))}
-
-            {section.bullets && (
-              <ul className={styles.list}>
-                {section.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))}
+        {/* Gövde kaydedilirken sanitize edilir; burada güvenli HTML basılır. */}
+        <div className={styles.body} dangerouslySetInnerHTML={{ __html: page.body }} />
 
         {page.showContact && (settings.contactEmail || socials.length > 0) && (
           <section className={styles.card} aria-labelledby="iletisim-kanallari">

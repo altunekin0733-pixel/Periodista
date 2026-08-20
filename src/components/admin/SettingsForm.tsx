@@ -79,6 +79,21 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
               Arama motorlarında ve RSS akışında kullanılan varsayılan açıklama.
             </p>
           </div>
+
+          <div className="admin-field">
+            <label htmlFor="about" className="admin-label">
+              Altbilgi &ldquo;Hakkında&rdquo; metni
+            </label>
+            <textarea
+              id="about"
+              name="about"
+              rows={3}
+              maxLength={320}
+              defaultValue={settings.about}
+              className="admin-textarea"
+            />
+            <p className="admin-hint">Altbilgideki Hakkında sütununda görünür.</p>
+          </div>
         </section>
 
         <section className="admin-panel">

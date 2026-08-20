@@ -100,7 +100,7 @@ export async function CategoryRail({ categorySlug, articles }: CategoryRailProps
 
   return (
     <div className={side ? styles.rail : styles.sliderOnly}>
-      <HeroSlider slides={slides.map(toHeroSlide)} />
+      <HeroSlider slides={slides.map(toHeroSlide)} compact />
       {side}
     </div>
   );

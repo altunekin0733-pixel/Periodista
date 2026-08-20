@@ -24,10 +24,12 @@
   box-shadow: 0 0 0 3px var(--primary-ring);
 }
 
+/* Haber fotoğrafları 16:9 çekiliyor; kutu başka bir orandayken `cover`
+   görseli kırpıp büyütüyordu. */
 .media {
   position: relative;
   display: block;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   background: var(--skeleton);
   overflow: hidden;
 }
@@ -116,20 +118,18 @@
 /* ---------- öne çıkan (lead) ---------- */
 
 @media (min-width: 48rem) {
+  /*
+   * Görsel kutusu metnin boyuna göre esnediğinde 2,5:1 gibi aşırı geniş bir
+   * orana düşüyor, fotoğraf da o kutuyu doldurmak için kırpılıp büyütülüyordu.
+   * Kutu artık kendi oranını koruyor; metin yanında dikeyde ortalanıyor.
+   */
   .lead {
     display: grid;
     grid-template-columns: 1.15fr 1fr;
-    align-items: stretch;
-  }
-
-  .lead .media {
-    aspect-ratio: auto;
-    height: 100%;
-    min-height: 15rem;
+    align-items: center;
   }
 
   .lead .body {
-    justify-content: center;
     gap: 0.6rem;
     padding: var(--space-lg);
   }

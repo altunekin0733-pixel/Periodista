@@ -24,7 +24,13 @@ export type HeroSlide = {
 
 const ROTATE_MS = 7000;
 
-export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
+type HeroSliderProps = {
+  slides: HeroSlide[];
+  /** Kategori sayfalarındaki karusel ana sayfadakinden alçak durur. */
+  compact?: boolean;
+};
+
+export function HeroSlider({ slides, compact = false }: HeroSliderProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
@@ -68,7 +74,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   return (
     <section
       ref={regionRef}
-      className={styles.slider}
+      className={`${styles.slider} ${compact ? styles.compact : ''}`}
       aria-roledescription="karusel"
       aria-label="Manşet haberler"
       onMouseEnter={() => setPaused(true)}

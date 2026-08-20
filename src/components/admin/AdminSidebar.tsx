@@ -2,6 +2,7 @@
 
 import {
   ExternalLink,
+  FileText,
   FolderTree,
   LayoutDashboard,
   LayoutPanelLeft,
@@ -28,6 +29,7 @@ const NAV_ITEMS = [
   { href: '/admin/haberler', label: 'Haberler', icon: Newspaper, exact: false },
   { href: '/admin/kategoriler', label: 'Kategoriler', icon: FolderTree, exact: false },
   { href: '/admin/paneller', label: 'Paneller', icon: LayoutPanelLeft, exact: false },
+  { href: '/admin/sayfalar', label: 'Sayfalar', icon: FileText, exact: false },
   { href: '/admin/yorumlar', label: 'Yorumlar', icon: MessageSquare, exact: false, badge: true },
   { href: '/admin/aboneler', label: 'Aboneler', icon: Mail, exact: false },
   { href: '/admin/ayarlar', label: 'Ayarlar', icon: Settings, exact: false },

@@ -9,6 +9,8 @@ const SETTINGS_KEY = 'site';
 const settingsSchema = z.object({
   tagline: z.string().max(160).default(SITE.tagline),
   description: z.string().max(320).default(SITE.description),
+  /** Altbilgideki "Hakkında" sütunu. Arama motoru açıklamasından ayrıdır. */
+  about: z.string().max(320).default(SITE.about),
   social: z.record(z.string(), z.string()).default({}),
   /** Künye ve iletişim sayfalarında yayınlanır; boş bırakılan satır gösterilmez. */
   contactEmail: z.string().max(160).default(''),

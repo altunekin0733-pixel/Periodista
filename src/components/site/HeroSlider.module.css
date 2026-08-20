@@ -1,6 +1,6 @@
 .slider {
   position: relative;
-  min-height: 22rem;
+  min-height: 24rem;
   border: 1px solid var(--outline-faint);
   border-radius: var(--radius);
   overflow: hidden;
@@ -10,7 +10,21 @@
 
 @media (min-width: 48rem) {
   .slider {
-    min-height: 27rem;
+    min-height: 30rem;
+  }
+}
+
+/*
+ * Kategori sayfalarındaki karusel ana sayfadaki manşetin yerini almaz; daha
+ * alçak durur ve başlığı bir kademe küçüktür.
+ */
+.compact {
+  min-height: 17rem;
+}
+
+@media (min-width: 48rem) {
+  .compact {
+    min-height: 22rem;
   }
 }
 
@@ -94,14 +108,19 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* Manşet başlığı görselin üstünü kapatmasın diye kendi ölçeğinde durur. */
 .title {
-  font-size: var(--text-hero);
+  font-size: clamp(1.25rem, 0.95rem + 1.45vw, 2.125rem);
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: var(--tracking-tight);
   color: #fff;
-  max-width: 20ch;
+  max-width: 24ch;
   text-wrap: balance;
+}
+
+.compact .title {
+  font-size: clamp(1.125rem, 0.95rem + 0.85vw, 1.625rem);
 }
 
 .titleLink::after {
@@ -112,10 +131,21 @@
 }
 
 .dek {
-  max-width: 46ch;
-  font-size: var(--text-lead);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  /* Uzun spot görseli yutmasın: iki satırda kesilir. */
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  max-width: 52ch;
+  font-size: var(--text-sm);
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.82);
+}
+
+.compact .dek {
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
 .meta {

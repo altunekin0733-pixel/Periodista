@@ -32,14 +32,11 @@
 }
 
 /*
- * Panel on beş haber taşır; geniş ekranda manşet karuselinin yanında durduğu
- * için kendi içinde kayar, satırı aşağı doğru uzatmaz.
+ * Panel on beş haber taşır; geniş ekranda yanındaki karuselin yüksekliğine
+ * uyup kendi içinde kayar. Sınırı kullanıldığı düzen belirler (ana sayfada
+ * `.hero`, kategoride `.rail`), burada yalnızca kaydırma davranışı durur.
  */
 @media (min-width: 64rem) {
-  .panel {
-    max-height: 27rem;
-  }
-
   .list {
     min-height: 0;
     overflow-y: auto;

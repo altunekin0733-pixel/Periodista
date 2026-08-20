@@ -75,6 +75,20 @@ const FALLBACK: RatesSnapshot = {
   ],
 };
 
+/**
+ * Truncgil JPY'yi yüz kat küçük yayımlıyor: 1 yen ≈ 0,30 TL iken 0,0030 yazıyor.
+ * Diğer para birimlerinde böyle bir sapma yok. Sağlayıcı düzeltirse kuralın
+ * kendiliğinden devre dışı kalması için ölçek sabit değil, aynı yanıttaki USD
+ * kuruna göre makullük kontrolüyle uygulanır.
+ */
+const MAX_PLAUSIBLE_USD_JPY = 1000;
+
+function normalizeJpy(value: number, usdTry: number): number {
+  if (usdTry <= 0 || value <= 0) return value;
+
+  return usdTry / value > MAX_PLAUSIBLE_USD_JPY ? value * 100 : value;
+}
+
 function toDirection(change: number): RateDirection {
   if (change > 0) return 'up';
   if (change < 0) return 'down';
@@ -101,13 +115,17 @@ async function fetchFromTruncgil(spec: Instrument[]): Promise<RatesSnapshot | nu
     const payload = parsed.data;
     const items: RateItem[] = [];
 
+    const usd = truncgilEntrySchema.safeParse(payload.USD);
+    const usdTry = usd.success ? (usd.data.Selling ?? usd.data.Buying ?? 0) : 0;
+
     for (const item of spec) {
       const entry = truncgilEntrySchema.safeParse(payload[item.key]);
       if (!entry.success) continue;
 
-      const value = entry.data.Selling ?? entry.data.Buying;
-      if (typeof value !== 'number' || value <= 0) continue;
+      const raw = entry.data.Selling ?? entry.data.Buying;
+      if (typeof raw !== 'number' || raw <= 0) continue;
 
+      const value = item.key === 'JPY' ? normalizeJpy(raw, usdTry) : raw;
       const change = entry.data.Change ?? 0;
 
       items.push({

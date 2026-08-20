@@ -57,7 +57,7 @@ export async function SiteFooter() {
 
         <div className={styles.column}>
           <p className="label-caps">Hakkında</p>
-          <p className={styles.about}>{settings.description}</p>
+          <p className={styles.about}>{settings.about}</p>
         </div>
 
         {settings.newsletterEnabled && (

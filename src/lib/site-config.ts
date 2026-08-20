@@ -4,6 +4,8 @@ export const SITE = {
   tagline: 'Gündemin nabzı',
   description:
     'Periodista; gündem, spor, dünya, ekonomi, teknoloji ve kültür-sanat başlıklarında güncel haberleri tek bir yerde toplar.',
+  about:
+    'Bağımsız, ilkeli ve Atatürk ilkeleri doğrultusunda; gerçeği arayan tarafsız haberciliğin yeni nesil sesi.',
   locale: 'tr_TR',
   language: 'tr',
 } as const;

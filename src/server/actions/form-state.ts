@@ -63,3 +63,10 @@ export type PanelsState = {
 };
 
 export const PANELS_INITIAL_STATE: PanelsState = { status: 'idle', message: '' };
+
+export type PageFormState = {
+  status: 'idle' | 'error' | 'success';
+  message: string;
+};
+
+export const PAGE_INITIAL_STATE: PageFormState = { status: 'idle', message: '' };

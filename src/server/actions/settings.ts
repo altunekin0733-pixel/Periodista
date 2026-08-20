@@ -55,6 +55,7 @@ export async function updateSettings(
   const payload = {
     tagline: String(formData.get('tagline') ?? ''),
     description: String(formData.get('description') ?? ''),
+    about: String(formData.get('about') ?? ''),
     social,
     contactEmail: contactEmail.data,
     contactAddress: String(formData.get('contactAddress') ?? '').trim(),

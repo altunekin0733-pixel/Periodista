@@ -33,7 +33,7 @@
   }
 
   .rail .placeholder {
-    min-height: 27rem;
+    min-height: 22rem;
   }
 
   /*
@@ -42,6 +42,6 @@
    * satırlar görünür.
    */
   .rail > :last-child {
-    max-height: 27rem;
+    max-height: 22rem;
   }
 }
