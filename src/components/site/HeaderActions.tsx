@@ -68,38 +68,17 @@ export function HeaderActions({ categories }: HeaderActionsProps) {
   }
 
   return (
-    // Arama açıkken kategori menüsü çekilsin diye durum başlığa duyurulur;
-    // menü sunucu bileşeninde olduğu için CSS `:has()` ile okunuyor.
-    <div className={styles.actions} data-search-open={searchOpen ? 'true' : 'false'}>
-      <form
-        className={`${styles.search} ${searchOpen ? styles.searchOpen : ''}`}
-        onSubmit={submitSearch}
-        role="search"
+    <div className={styles.actions}>
+      <button
+        type="button"
+        className={styles.iconButton}
+        onClick={() => setSearchOpen((open) => !open)}
+        aria-label={searchOpen ? 'Aramayı kapat' : 'Aramayı aç'}
+        aria-expanded={searchOpen}
+        aria-controls={searchPanelId}
       >
-        <input
-          ref={searchInputRef}
-          id={searchPanelId}
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Haberlerde ara…"
-          className={styles.searchInput}
-          aria-label="Haberlerde ara"
-          tabIndex={searchOpen ? 0 : -1}
-        />
-        <button
-          type={searchOpen ? 'submit' : 'button'}
-          className={styles.iconButton}
-          onClick={() => {
-            if (!searchOpen) setSearchOpen(true);
-          }}
-          aria-label={searchOpen ? 'Aramayı çalıştır' : 'Aramayı aç'}
-          aria-expanded={searchOpen}
-          aria-controls={searchPanelId}
-        >
-          <Search size={17} aria-hidden="true" />
-        </button>
-      </form>
+        {searchOpen ? <X size={18} aria-hidden="true" /> : <Search size={17} aria-hidden="true" />}
+      </button>
 
       <ThemeToggle />
 
@@ -113,6 +92,31 @@ export function HeaderActions({ categories }: HeaderActionsProps) {
       >
         {menuOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
       </button>
+
+      {/*
+        Arama şeridi başlık satırının altına açılır. Satır içinde büyüseydi
+        kategori menüsüyle yer kavgasına girer, biri diğerinin üstüne binerdi;
+        alt şeritte hem menü hem düğmeler yerinde kalıyor.
+      */}
+      {searchOpen && (
+        <form id={searchPanelId} className={styles.searchPanel} onSubmit={submitSearch} role="search">
+          <div className={styles.searchRow}>
+            <Search size={17} className={styles.searchIcon} aria-hidden="true" />
+            <input
+              ref={searchInputRef}
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Haberlerde ara…"
+              className={styles.searchInput}
+              aria-label="Haberlerde ara"
+            />
+            <button type="submit" className={styles.searchSubmit} disabled={query.trim().length < 2}>
+              Ara
+            </button>
+          </div>
+        </form>
+      )}
 
       {menuOpen && (
         <>

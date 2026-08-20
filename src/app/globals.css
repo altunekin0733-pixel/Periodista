@@ -51,7 +51,14 @@ select {
   color: inherit;
 }
 
+/*
+ * Tarayıcının düğme varsayılanları (gri zemin, çıkıntılı kenarlık) koyu temada
+ * gözle görülür biçimde yanlış duruyor. Kendi zeminini/kenarlığını isteyen
+ * sınıflar bunları zaten kendisi tanımlıyor.
+ */
 button {
+  background: none;
+  border: none;
   cursor: pointer;
 }
 

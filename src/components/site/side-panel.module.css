@@ -11,12 +11,6 @@
   overflow: hidden;
 }
 
-@media (min-width: 64rem) {
-  .panel {
-    max-height: 27rem;
-  }
-}
-
 .header {
   display: flex;
   align-items: center;
@@ -40,6 +34,9 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* Karuselin yanında içerik taştığında kaydırma çubuğu satırları ezmesin. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline) transparent;
 }
 
 .tabs {

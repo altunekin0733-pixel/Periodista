@@ -30,32 +30,12 @@
   flex-shrink: 0;
 }
 
-/* Dar ekranda arama açıkken logo yerini arama alanına bırakır. */
-@media (max-width: 34rem) {
-  .inner:has([data-search-open='true']) .brand {
-    display: none;
-  }
-}
-
 .nav {
   display: none;
   flex: 1;
   min-width: 0;
   /* Dar başlıkta bağlantılar kutudan taşıp komşu öğelerin üstüne binmesin. */
   overflow: hidden;
-  transition:
-    opacity var(--dur) var(--ease-out),
-    visibility var(--dur) var(--ease-out);
-}
-
-/*
- * Arama açıldığında alan sola doğru büyüyor. Menüyü yerinde bırakmak
- * bağlantıların arama kutusuyla üst üste binmesine yol açtığı için menü
- * arama süresince çekilir; kapanınca geri gelir.
- */
-.inner:has([data-search-open='true']) .nav {
-  opacity: 0;
-  visibility: hidden;
 }
 
 /* Kategori menüsü ancak yeterli genişlikte yatay olarak sığar. */

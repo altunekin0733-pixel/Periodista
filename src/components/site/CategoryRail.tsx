@@ -87,14 +87,20 @@ export async function CategoryRail({ categorySlug, articles }: CategoryRailProps
 
   const side = await loadSide(categorySlug, rest);
 
-  if (slides.length === 0 && !side) return null;
-
-  const className =
-    slides.length > 0 && side ? styles.rail : slides.length > 0 ? styles.sliderOnly : styles.sideOnly;
+  // Kategoride henüz haber yoksa karuselin yeri boş bırakılmaz: satırın sol
+  // tarafını bilgilendirici bir kutu doldurur, panel yanında durmayı sürdürür.
+  if (slides.length === 0) {
+    return (
+      <div className={side ? styles.rail : styles.placeholderOnly}>
+        <p className={styles.placeholder}>Bu kategoride henüz yayınlanmış haber yok.</p>
+        {side}
+      </div>
+    );
+  }
 
   return (
-    <div className={className}>
-      {slides.length > 0 && <HeroSlider slides={slides.map(toHeroSlide)} />}
+    <div className={side ? styles.rail : styles.sliderOnly}>
+      <HeroSlider slides={slides.map(toHeroSlide)} />
       {side}
     </div>
   );

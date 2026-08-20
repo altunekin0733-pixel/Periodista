@@ -76,6 +76,10 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
   if (page > 1 && items.length === 0) notFound();
 
+  // Karusel satırı yalnızca filtresiz ilk sayfada çıkar; boş kategori mesajını
+  // da o satır üstlenir, aşağıda ikinci kez tekrarlanmaz.
+  const showRail = page === 1 && !subsection;
+
   return (
     <>
       <header className={styles.hero}>
@@ -103,10 +107,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       </header>
 
       <div className="container">
-        {/* Karusel ve yan panel yalnızca ilk sayfada, filtresiz görünümde. */}
-        {page === 1 && !subsection && (
-          <CategoryRail categorySlug={category.slug} articles={rail} />
-        )}
+        {showRail && <CategoryRail categorySlug={category.slug} articles={rail} />}
 
         <SubcategoryFilter
           categorySlug={category.slug}
@@ -115,11 +116,13 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         />
 
         {items.length === 0 ? (
-          <p className={styles.empty}>
-            {subsection
-              ? 'Bu dalda henüz yayınlanmış haber yok.'
-              : 'Bu kategoride henüz yayınlanmış haber yok.'}
-          </p>
+          showRail ? null : (
+            <p className={styles.empty}>
+              {subsection
+                ? 'Bu dalda henüz yayınlanmış haber yok.'
+                : 'Bu kategoride henüz yayınlanmış haber yok.'}
+            </p>
+          )
         ) : (
           <div className={styles.grid}>
             {items.map((article) => (

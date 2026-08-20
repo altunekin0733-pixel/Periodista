@@ -1,9 +1,22 @@
 .rail,
 .sliderOnly,
-.sideOnly {
+.placeholderOnly {
   display: grid;
   gap: var(--space-md);
   padding-block: var(--space-lg);
+}
+
+/* Haber yokken karuselin yerini tutan kutu. */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
+  padding: var(--space-2xl) var(--space-lg);
+  border: 1px dashed var(--outline);
+  border-radius: var(--radius);
+  text-align: center;
+  color: var(--fg-muted);
 }
 
 /* Ana sayfadaki manşet/son dakika satırıyla aynı oran. */
@@ -14,12 +27,21 @@
   }
 
   /* Yan panelin verisi yoksa karusel satırın tamamını kullanır. */
-  .sliderOnly {
+  .sliderOnly,
+  .placeholderOnly {
     grid-template-columns: 1fr;
   }
 
-  /* Karusele haber yoksa panel tek başına kalır; satır boyunca gerilmez. */
-  .sideOnly {
-    grid-template-columns: minmax(0, 28rem);
+  .rail .placeholder {
+    min-height: 27rem;
+  }
+
+  /*
+   * Yan panel karuselin yanındayken onun yüksekliğine uyar, içeriği taşarsa
+   * kendi içinde kayar. Tek başınayken böyle bir sınır anlamsız — bütün
+   * satırlar görünür.
+   */
+  .rail > :last-child {
+    max-height: 27rem;
   }
 }
