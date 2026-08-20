@@ -19,10 +19,7 @@ export const metadata: Metadata = {
   },
   description: SITE.description,
   applicationName: SITE.name,
-  alternates: {
-    canonical: '/',
-    types: { 'application/rss+xml': '/rss.xml' },
-  },
+  alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     siteName: SITE.name,

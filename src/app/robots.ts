@@ -8,8 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        // Yönetim ve arama sonuçları dizine eklenmez.
-        disallow: ['/admin', '/giris', '/api/', '/arama'],
+        // Yönetim, arama sonuçları ve RSS akışı dizine eklenmez.
+        disallow: ['/admin', '/giris', '/api/', '/arama', '/rss.xml'],
       },
     ],
     sitemap: [absoluteUrl('/sitemap.xml'), absoluteUrl('/haber-sitemap.xml')],
