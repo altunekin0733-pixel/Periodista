@@ -1,4 +1,3 @@
-import { Rss } from 'lucide-react';
 import Link from 'next/link';
 
 import { SocialIcon } from '@/components/ui/SocialIcon';
@@ -23,27 +22,24 @@ export async function SiteFooter() {
           <Logo height={30} href={null} />
           <p className={styles.tagline}>{settings.tagline}</p>
 
-          <ul className={styles.socials}>
-            {socials.map((social) => (
-              <li key={social.key}>
-                <a
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.socialLink}
-                  title={social.name}
-                  aria-label={social.name}
-                >
-                  <SocialIcon platform={social.key} size={17} />
-                </a>
-              </li>
-            ))}
-            <li>
-              <a href="/rss.xml" className={styles.socialLink} title="RSS" aria-label="RSS akışı">
-                <Rss size={17} aria-hidden="true" />
-              </a>
-            </li>
-          </ul>
+          {socials.length > 0 && (
+            <ul className={styles.socials}>
+              {socials.map((social) => (
+                <li key={social.key}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.socialLink}
+                    title={social.name}
+                    aria-label={social.name}
+                  >
+                    <SocialIcon platform={social.key} size={17} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <nav className={styles.column} aria-label="Kategoriler">
@@ -91,12 +87,6 @@ export async function SiteFooter() {
         <div className={styles.bottomLinks}>
           <Link href="/arama" className={styles.link}>
             Arama
-          </Link>
-          <a href="/rss.xml" className={styles.link}>
-            RSS
-          </a>
-          <Link href="/admin" className={styles.link}>
-            Yönetim Paneli
           </Link>
         </div>
       </div>
