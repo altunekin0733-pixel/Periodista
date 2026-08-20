@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 
-import { LEAGUES, type StandingRow } from '@/lib/panels';
+import type { StandingRow } from '@/lib/panels';
+import { LEAGUES } from '@/lib/site-config';
 
 import panel from './side-panel.module.css';
 import styles from './StandingsPanel.module.css';

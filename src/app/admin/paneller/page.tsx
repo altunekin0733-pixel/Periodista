@@ -1,6 +1,7 @@
 import { AdminTopbar } from '@/components/admin/AdminTopbar';
 import { MoviesForm, StandingsForm } from '@/components/admin/PanelsForm';
-import { LEAGUES, toMoviesText, toStandingsText } from '@/lib/panels';
+import { toMoviesText, toStandingsText } from '@/lib/panels';
+import { LEAGUES } from '@/lib/site-config';
 import { getMovies, getStandings } from '@/lib/panels-store';
 
 export const metadata = { title: 'Kategori Panelleri' };

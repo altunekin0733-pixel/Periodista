@@ -6,18 +6,6 @@ import { z } from 'zod';
  * Okuma/yazma `panels-store.ts` içindedir.
  */
 
-/** Puan tablosu tutulan ligler — Süper Lig ve Avrupa'nın beş büyük ligi. */
-export const LEAGUES = [
-  { slug: 'super-lig', name: 'Süper Lig' },
-  { slug: 'premier-lig', name: 'Premier Lig' },
-  { slug: 'laliga', name: 'LaLiga' },
-  { slug: 'serie-a', name: 'Serie A' },
-  { slug: 'bundesliga', name: 'Bundesliga' },
-  { slug: 'ligue-1', name: 'Ligue 1' },
-] as const;
-
-export type LeagueSlug = (typeof LEAGUES)[number]['slug'];
-
 const standingRowSchema = z.object({
   team: z.string().min(1).max(60),
   played: z.number().int().min(0).max(99),

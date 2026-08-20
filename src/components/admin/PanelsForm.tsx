@@ -4,7 +4,7 @@ import { LoaderCircle, Save } from 'lucide-react';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import { LEAGUES } from '@/lib/panels';
+import { LEAGUES } from '@/lib/site-config';
 import { PANELS_INITIAL_STATE } from '@/server/actions/form-state';
 import { updateMovies, updateStandings } from '@/server/actions/panels';
 

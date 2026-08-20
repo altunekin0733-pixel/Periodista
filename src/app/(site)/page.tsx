@@ -76,6 +76,9 @@ export default async function HomePage() {
 
   return (
     <div className="container">
+      {/* Sayfanın tek h1'i; görsel karşılığı başlıktaki logodur. */}
+      <h1 className="visually-hidden">{`${SITE.name} — Güncel Haberler`}</h1>
+
       <div className={styles.hero}>
         {slides.length > 0 && <HeroSlider slides={slides} />}
         {/* Şeritteki haberlerin aynısı: en son yayınlanan BREAKING_LIMIT haber. */}

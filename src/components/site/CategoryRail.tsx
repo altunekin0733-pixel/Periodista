@@ -11,6 +11,7 @@ import { formatRelativeTime } from '@/lib/format';
 import { getMovies, getStandings } from '@/lib/panels-store';
 import { buildTrend, getRateHistory, recordRateSample, type RateTrend } from '@/lib/rate-history';
 import { getRates, PANEL_SPEC } from '@/lib/rates';
+import { CATEGORY_RAIL_LIMIT } from '@/lib/site-config';
 import type { ArticleCard } from '@/server/queries';
 
 import styles from './CategoryRail.module.css';
@@ -20,6 +21,10 @@ import styles from './CategoryRail.module.css';
  * karusel, sağda kategoriye özel yan panel. Panel genişliği ana sayfadaki son
  * dakika bloğuyla aynıdır. İkisinden biri boşsa diğeri satırı tek başına
  * kullanır — piyasa paneli, kategoride henüz haber yokken de görünür.
+ *
+ * `articles` karusele girecek haberlerle onların devamını birlikte taşır;
+ * özel paneli olmayan kategorilerde yan liste devamından beslenir, böylece
+ * karuselde dönen haberler yanında ikinci kez sıralanmaz.
  */
 type CategoryRailProps = {
   categorySlug: string;
@@ -66,27 +71,30 @@ async function moviesSide(): Promise<ReactNode> {
 }
 
 /** Kategoriye göre yan panel; özel paneli olmayan kategori başlık listesi gösterir. */
-async function loadSide({ categorySlug, articles }: CategoryRailProps): Promise<ReactNode> {
+async function loadSide(categorySlug: string, rest: ArticleCard[]): Promise<ReactNode> {
   if (categorySlug === 'ekonomi') return marketSide();
   if (categorySlug === 'spor') return standingsSide();
   if (categorySlug === 'kultur-sanat') return moviesSide();
 
-  if (articles.length === 0) return null;
+  if (rest.length === 0) return null;
 
-  return <HeadlineList title="Bu Kategoride Son" articles={articles} />;
+  return <HeadlineList title="Bu Kategoride Son" articles={rest} />;
 }
 
 export async function CategoryRail({ categorySlug, articles }: CategoryRailProps) {
-  const side = await loadSide({ categorySlug, articles });
-  const hasSlider = articles.length > 0;
+  const slides = articles.slice(0, CATEGORY_RAIL_LIMIT);
+  const rest = articles.slice(CATEGORY_RAIL_LIMIT);
 
-  if (!hasSlider && !side) return null;
+  const side = await loadSide(categorySlug, rest);
 
-  const className = hasSlider && side ? styles.rail : hasSlider ? styles.sliderOnly : styles.sideOnly;
+  if (slides.length === 0 && !side) return null;
+
+  const className =
+    slides.length > 0 && side ? styles.rail : slides.length > 0 ? styles.sliderOnly : styles.sideOnly;
 
   return (
     <div className={className}>
-      {hasSlider && <HeroSlider slides={articles.map(toHeroSlide)} />}
+      {slides.length > 0 && <HeroSlider slides={slides.map(toHeroSlide)} />}
       {side}
     </div>
   );

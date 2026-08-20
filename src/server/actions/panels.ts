@@ -4,14 +4,10 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { requireSession } from '@/lib/auth';
-import {
-  LEAGUES,
-  parseMoviesText,
-  parseStandingsText,
-  type StandingRow,
-} from '@/lib/panels';
+import { parseMoviesText, parseStandingsText, type StandingRow } from '@/lib/panels';
 import { saveMovies, saveStandings } from '@/lib/panels-store';
 import { categoryHref } from '@/lib/routes';
+import { LEAGUES } from '@/lib/site-config';
 import type { PanelsState } from './form-state';
 
 const noteSchema = z.string().trim().max(120);

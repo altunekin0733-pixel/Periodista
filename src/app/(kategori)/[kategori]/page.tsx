@@ -7,7 +7,13 @@ import { Pagination } from '@/components/site/Pagination';
 import { SubcategoryFilter } from '@/components/site/SubcategoryFilter';
 import { CategoryIcon } from '@/components/ui/Icon';
 import { categoryHref, parsePageParam } from '@/lib/routes';
-import { CATEGORY_RAIL_LIMIT, SITE, absoluteUrl, getSubsections } from '@/lib/site-config';
+import {
+  CATEGORY_RAIL_LIMIT,
+  CATEGORY_SIDE_LIMIT,
+  SITE,
+  absoluteUrl,
+  getSubsections,
+} from '@/lib/site-config';
 import { getArticlesByCategory, getCategoryBySlug, getCategoryRail } from '@/server/queries';
 
 import styles from './page.module.css';
@@ -64,7 +70,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const subsection = resolveSubsection(category.slug, query.dal);
 
   const [rail, { items, total, pageCount }] = await Promise.all([
-    getCategoryRail(category.id, CATEGORY_RAIL_LIMIT),
+    getCategoryRail(category.id, CATEGORY_RAIL_LIMIT + CATEGORY_SIDE_LIMIT),
     getArticlesByCategory(category.id, page, subsection ?? undefined),
   ]);
 

@@ -97,6 +97,26 @@ export function getSubsections(categorySlug: string): { slug: string; name: stri
 }
 
 /**
+ * Spor sayfasındaki puan tablosunda tutulan ligler — Süper Lig ve Avrupa'nın
+ * beş büyük ligi. Şema doğrulamasından ayrı tutulur: liste hem sunucuda hem
+ * tarayıcıda kullanılıyor, zod'la aynı modülde dursaydı istemci paketine
+ * gereksiz yere doğrulama kütüphanesi girerdi.
+ */
+export const LEAGUES = [
+  { slug: 'super-lig', name: 'Süper Lig' },
+  { slug: 'premier-lig', name: 'Premier Lig' },
+  { slug: 'laliga', name: 'LaLiga' },
+  { slug: 'serie-a', name: 'Serie A' },
+  { slug: 'bundesliga', name: 'Bundesliga' },
+  { slug: 'ligue-1', name: 'Ligue 1' },
+] as const;
+
+export type LeagueSlug = (typeof LEAGUES)[number]['slug'];
+
+/** Kategori karuselinin altındaki yan listeye giren haber sayısı. */
+export const CATEGORY_SIDE_LIMIT = 10;
+
+/**
  * Altbilginin alt satırındaki kurumsal sayfalar. Adresleri `RESERVED_SLUGS`
  * içinde de yer alır; kategori slug'ı ile çakışamazlar.
  */
