@@ -68,7 +68,9 @@ export function HeaderActions({ categories }: HeaderActionsProps) {
   }
 
   return (
-    <div className={styles.actions}>
+    // Arama açıkken kategori menüsü çekilsin diye durum başlığa duyurulur;
+    // menü sunucu bileşeninde olduğu için CSS `:has()` ile okunuyor.
+    <div className={styles.actions} data-search-open={searchOpen ? 'true' : 'false'}>
       <form
         className={`${styles.search} ${searchOpen ? styles.searchOpen : ''}`}
         onSubmit={submitSearch}

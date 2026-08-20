@@ -13,7 +13,9 @@ export async function SiteHeader() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Logo height={36} priority />
+        <div className={styles.brand}>
+          <Logo height={36} priority />
+        </div>
 
         <nav className={styles.nav} aria-label="Kategoriler">
           <ul className={styles.navList}>
