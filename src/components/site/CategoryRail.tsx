@@ -1,4 +1,5 @@
 import { after } from 'next/server';
+import type { ReactNode } from 'react';
 
 import { HeadlineList } from '@/components/site/HeadlineList';
 import { toHeroSlide } from '@/components/site/hero-slide';
@@ -17,14 +18,15 @@ import styles from './CategoryRail.module.css';
 /**
  * Kategori sayfasının tepesi: solda kategorinin en yeni haberlerinden oluşan
  * karusel, sağda kategoriye özel yan panel. Panel genişliği ana sayfadaki son
- * dakika bloğuyla aynıdır.
+ * dakika bloğuyla aynıdır. İkisinden biri boşsa diğeri satırı tek başına
+ * kullanır — piyasa paneli, kategoride henüz haber yokken de görünür.
  */
 type CategoryRailProps = {
   categorySlug: string;
   articles: ArticleCard[];
 };
 
-async function MarketSide() {
+async function marketSide(): Promise<ReactNode> {
   const [rates, samples] = await Promise.all([getRates(PANEL_SPEC), getRateHistory()]);
 
   if (rates.source === 'fallback' || rates.items.length === 0) return null;
@@ -46,35 +48,46 @@ async function MarketSide() {
   );
 }
 
-async function StandingsSide() {
+async function standingsSide(): Promise<ReactNode> {
   const standings = await getStandings();
+  const hasRows = Object.values(standings.leagues).some((rows) => rows.length > 0);
+
+  if (!hasRows) return null;
 
   return <StandingsPanel leagues={standings.leagues} note={standings.note} />;
 }
 
-async function MoviesSide() {
+async function moviesSide(): Promise<ReactNode> {
   const movies = await getMovies();
+
+  if (movies.films.length === 0) return null;
 
   return <MoviesPanel films={movies.films} note={movies.note} />;
 }
 
 /** Kategoriye göre yan panel; özel paneli olmayan kategori başlık listesi gösterir. */
-async function CategorySide({ categorySlug, articles }: CategoryRailProps) {
-  if (categorySlug === 'ekonomi') return <MarketSide />;
-  if (categorySlug === 'spor') return <StandingsSide />;
-  if (categorySlug === 'kultur-sanat') return <MoviesSide />;
+async function loadSide({ categorySlug, articles }: CategoryRailProps): Promise<ReactNode> {
+  if (categorySlug === 'ekonomi') return marketSide();
+  if (categorySlug === 'spor') return standingsSide();
+  if (categorySlug === 'kultur-sanat') return moviesSide();
+
+  if (articles.length === 0) return null;
 
   return <HeadlineList title="Bu Kategoride Son" articles={articles} />;
 }
 
-export function CategoryRail({ categorySlug, articles }: CategoryRailProps) {
-  if (articles.length === 0) return null;
+export async function CategoryRail({ categorySlug, articles }: CategoryRailProps) {
+  const side = await loadSide({ categorySlug, articles });
+  const hasSlider = articles.length > 0;
+
+  if (!hasSlider && !side) return null;
+
+  const className = hasSlider && side ? styles.rail : hasSlider ? styles.sliderOnly : styles.sideOnly;
 
   return (
-    <div className={styles.rail}>
-      <HeroSlider slides={articles.map(toHeroSlide)} />
-      {/* Panelin verisi henüz girilmemişse hiç basılmaz; karusel satırı kaplar. */}
-      <CategorySide categorySlug={categorySlug} articles={articles} />
+    <div className={className}>
+      {hasSlider && <HeroSlider slides={articles.map(toHeroSlide)} />}
+      {side}
     </div>
   );
 }

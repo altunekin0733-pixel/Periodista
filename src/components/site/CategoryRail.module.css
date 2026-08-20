@@ -1,4 +1,6 @@
-.rail {
+.rail,
+.sliderOnly,
+.sideOnly {
   display: grid;
   gap: var(--space-md);
   padding-block: var(--space-lg);
@@ -11,8 +13,13 @@
     align-items: stretch;
   }
 
-  /* Panelin verisi yoksa karusel satırın tamamını kullanır. */
-  .rail:has(> :only-child) {
+  /* Yan panelin verisi yoksa karusel satırın tamamını kullanır. */
+  .sliderOnly {
     grid-template-columns: 1fr;
+  }
+
+  /* Karusele haber yoksa panel tek başına kalır; satır boyunca gerilmez. */
+  .sideOnly {
+    grid-template-columns: minmax(0, 28rem);
   }
 }
