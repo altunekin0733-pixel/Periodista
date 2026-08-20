@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { articleHref, categoryHref, tagHref } from '@/lib/routes';
-import { absoluteUrl } from '@/lib/site-config';
+import { FOOTER_PAGES, absoluteUrl } from '@/lib/site-config';
 import { getAllPublishedForFeed, getCategories, getPopularTags } from '@/server/queries';
 
 // Tarayıcılara açık dosya; derleme anında veritabanına bağlanmaya gerek yok.
@@ -28,6 +28,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: newest,
       changeFrequency: 'hourly' as const,
       priority: 0.8,
+    })),
+    ...FOOTER_PAGES.map((page) => ({
+      url: absoluteUrl(`/${page.slug}`),
+      lastModified: newest,
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
     })),
     ...articles.map((article) => ({
       url: absoluteUrl(articleHref(article.category.slug, article.slug)),

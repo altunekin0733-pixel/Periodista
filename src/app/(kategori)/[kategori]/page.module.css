@@ -54,18 +54,9 @@
   margin-inline-start: 0.35rem;
 }
 
-.list {
-  padding-top: var(--space-xl);
-}
-
-.lead {
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-lg);
-  border-bottom: 1px solid var(--outline-faint);
-}
-
 .grid {
   display: grid;
+  padding-top: var(--space-xs);
   gap: var(--space-md);
   grid-template-columns: 1fr;
 }

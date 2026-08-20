@@ -60,7 +60,6 @@ export default async function AdminArticlesPage({ searchParams }: PageProps) {
         authorName: true,
         status: true,
         featured: true,
-        breaking: true,
         publishedAt: true,
         updatedAt: true,
         viewCount: true,
@@ -142,7 +141,6 @@ export default async function AdminArticlesPage({ searchParams }: PageProps) {
                         </Link>
                         <div className="admin-inline admin-hint">
                           {article.featured && <span className="admin-badge is-neutral">Manşet</span>}
-                          {article.breaking && <span className="admin-badge is-neutral">Son dakika</span>}
                           {article._count.comments > 0 && (
                             <span className="admin-hint">{article._count.comments} yorum</span>
                           )}

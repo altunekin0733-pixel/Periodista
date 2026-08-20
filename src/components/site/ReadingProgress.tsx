@@ -7,18 +7,38 @@ import styles from './ReadingProgress.module.css';
 /**
  * Okuma ilerleme çubuğu. Scroll dinleyicisi yerine rAF ile bir sonraki
  * boyama karesine kilitlenir; kaydırma sırasında düzen hesabı tetiklemez.
+ *
+ * `targetId` verildiğinde ilerleme yalnızca o bölümün içinde ölçülür. Haber
+ * sayfasında altta kesintisiz akış büyüdüğü için belge yüksekliği ölçüt
+ * olamaz: çubuk okuyucu ilerledikçe geri gider.
  */
-export function ReadingProgress() {
+export function ReadingProgress({ targetId }: { targetId?: string }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     let frame = 0;
 
+    function ratioWithin(element: HTMLElement): number {
+      const rect = element.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+
+      if (scrollable <= 0) return rect.bottom <= window.innerHeight ? 1 : 0;
+
+      return -rect.top / scrollable;
+    }
+
     function update() {
       frame = 0;
 
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-      const ratio = scrollable > 0 ? window.scrollY / scrollable : 0;
+      const target = targetId ? document.getElementById(targetId) : null;
+
+      const ratio = target
+        ? ratioWithin(target)
+        : (() => {
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+
+            return scrollable > 0 ? window.scrollY / scrollable : 0;
+          })();
 
       setProgress(Math.min(1, Math.max(0, ratio)));
     }
@@ -37,7 +57,7 @@ export function ReadingProgress() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, []);
+  }, [targetId]);
 
   return (
     <div className={styles.track} aria-hidden="true">

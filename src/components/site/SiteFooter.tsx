@@ -2,21 +2,17 @@ import { Rss } from 'lucide-react';
 import Link from 'next/link';
 
 import { SocialIcon } from '@/components/ui/SocialIcon';
-import { categoryHref, tagHref } from '@/lib/routes';
+import { categoryHref } from '@/lib/routes';
 import { getSettings, toSocialLinks } from '@/lib/settings';
-import { SITE } from '@/lib/site-config';
-import { getCategories, getPopularTags } from '@/server/queries';
+import { FOOTER_PAGES, SITE } from '@/lib/site-config';
+import { getCategories } from '@/server/queries';
 
 import { Logo } from './Logo';
 import { NewsletterForm } from './NewsletterForm';
 import styles from './SiteFooter.module.css';
 
 export async function SiteFooter() {
-  const [categories, settings, tags] = await Promise.all([
-    getCategories(),
-    getSettings(),
-    getPopularTags(10),
-  ]);
+  const [categories, settings] = await Promise.all([getCategories(), getSettings()]);
 
   const socials = toSocialLinks(settings);
 
@@ -27,29 +23,27 @@ export async function SiteFooter() {
           <Logo height={30} href={null} />
           <p className={styles.tagline}>{settings.tagline}</p>
 
-          {socials.length > 0 && (
-            <ul className={styles.socials}>
-              {socials.map((social) => (
-                <li key={social.key}>
-                  <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.socialLink}
-                    title={social.name}
-                    aria-label={social.name}
-                  >
-                    <SocialIcon platform={social.key} size={17} />
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a href="/rss.xml" className={styles.socialLink} title="RSS" aria-label="RSS akışı">
-                  <Rss size={17} aria-hidden="true" />
+          <ul className={styles.socials}>
+            {socials.map((social) => (
+              <li key={social.key}>
+                <a
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialLink}
+                  title={social.name}
+                  aria-label={social.name}
+                >
+                  <SocialIcon platform={social.key} size={17} />
                 </a>
               </li>
-            </ul>
-          )}
+            ))}
+            <li>
+              <a href="/rss.xml" className={styles.socialLink} title="RSS" aria-label="RSS akışı">
+                <Rss size={17} aria-hidden="true" />
+              </a>
+            </li>
+          </ul>
         </div>
 
         <nav className={styles.column} aria-label="Kategoriler">
@@ -65,20 +59,10 @@ export async function SiteFooter() {
           </ul>
         </nav>
 
-        {tags.length > 0 && (
-          <nav className={styles.column} aria-label="Popüler etiketler">
-            <p className="label-caps">Etiketler</p>
-            <ul className={styles.tagList}>
-              {tags.map((tag) => (
-                <li key={tag.slug}>
-                  <Link href={tagHref(tag.slug)} className={styles.tag}>
-                    {tag.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        <div className={styles.column}>
+          <p className="label-caps">Hakkında</p>
+          <p className={styles.about}>{settings.description}</p>
+        </div>
 
         {settings.newsletterEnabled && (
           <div className={styles.column}>
@@ -86,6 +70,19 @@ export async function SiteFooter() {
           </div>
         )}
       </div>
+
+      {/* Kurumsal sayfalar kategorilerin altında ayrı bir satırda toplanır. */}
+      <nav className={styles.pages} aria-label="Kurumsal sayfalar">
+        <ul className={styles.pageList}>
+          {FOOTER_PAGES.map((page) => (
+            <li key={page.slug}>
+              <Link href={`/${page.slug}`} className={styles.link}>
+                {page.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       <div className={styles.bottom}>
         <p>

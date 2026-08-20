@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ArticleCard } from '@/components/site/ArticleCard';
+import { CategoryRail } from '@/components/site/CategoryRail';
 import { Pagination } from '@/components/site/Pagination';
+import { SubcategoryFilter } from '@/components/site/SubcategoryFilter';
 import { CategoryIcon } from '@/components/ui/Icon';
 import { categoryHref, parsePageParam } from '@/lib/routes';
-import { SITE, absoluteUrl } from '@/lib/site-config';
-import { getArticlesByCategory, getCategoryBySlug } from '@/server/queries';
+import { CATEGORY_RAIL_LIMIT, SITE, absoluteUrl, getSubsections } from '@/lib/site-config';
+import { getArticlesByCategory, getCategoryBySlug, getCategoryRail } from '@/server/queries';
 
 import styles from './page.module.css';
 
@@ -14,24 +16,38 @@ export const revalidate = 120;
 
 type PageProps = {
   params: Promise<{ kategori: string }>;
-  searchParams: Promise<{ sayfa?: string }>;
+  searchParams: Promise<{ sayfa?: string; dal?: string }>;
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { kategori } = await params;
+/** `?dal=` yalnızca kategoriye tanımlı bir dalsa kabul edilir. */
+function resolveSubsection(categorySlug: string, raw: string | undefined): string | null {
+  if (!raw) return null;
+
+  return getSubsections(categorySlug).some((item) => item.slug === raw) ? raw : null;
+}
+
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+  const [{ kategori }, query] = await Promise.all([params, searchParams]);
   const category = await getCategoryBySlug(kategori);
 
   if (!category) return { title: 'Kategori bulunamadı' };
 
+  const subsection = resolveSubsection(category.slug, query.dal);
+  const subsectionName = getSubsections(category.slug).find(
+    (item) => item.slug === subsection,
+  )?.name;
+
+  const title = subsectionName ? `${category.name} — ${subsectionName}` : category.name;
   const description = category.description || `${category.name} kategorisindeki güncel haberler.`;
 
   return {
-    title: category.name,
+    title,
+    // Dal filtresi kanonik adresi bölmesin: her zaman kategori kökü gösterilir.
     description,
     alternates: { canonical: categoryHref(category.slug) },
     openGraph: {
       type: 'website',
-      title: `${category.name} — ${SITE.name}`,
+      title: `${title} — ${SITE.name}`,
       description,
       url: absoluteUrl(categoryHref(category.slug)),
     },
@@ -45,11 +61,14 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   if (!category) notFound();
 
   const page = parsePageParam(query.sayfa);
-  const { items, total, pageCount } = await getArticlesByCategory(category.id, page);
+  const subsection = resolveSubsection(category.slug, query.dal);
+
+  const [rail, { items, total, pageCount }] = await Promise.all([
+    getCategoryRail(category.id, CATEGORY_RAIL_LIMIT),
+    getArticlesByCategory(category.id, page, subsection ?? undefined),
+  ]);
 
   if (page > 1 && items.length === 0) notFound();
-
-  const [lead, ...rest] = items;
 
   return (
     <>
@@ -78,26 +97,37 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       </header>
 
       <div className="container">
-        {items.length === 0 ? (
-          <p className={styles.empty}>Bu kategoride henüz yayınlanmış haber yok.</p>
-        ) : (
-          <div className={styles.list}>
-            {/* İlk sayfanın ilk haberi geniş kart olarak öne çıkar. */}
-            {page === 1 && lead && (
-              <div className={styles.lead}>
-                <ArticleCard article={lead} variant="lead" showDek priority />
-              </div>
-            )}
+        {/* Karusel ve yan panel yalnızca ilk sayfada, filtresiz görünümde. */}
+        {page === 1 && !subsection && (
+          <CategoryRail categorySlug={category.slug} articles={rail} />
+        )}
 
-            <div className={styles.grid}>
-              {(page === 1 ? rest : items).map((article) => (
-                <ArticleCard key={article.id} article={article} showDek />
-              ))}
-            </div>
+        <SubcategoryFilter
+          categorySlug={category.slug}
+          categoryName={category.name}
+          active={subsection}
+        />
+
+        {items.length === 0 ? (
+          <p className={styles.empty}>
+            {subsection
+              ? 'Bu dalda henüz yayınlanmış haber yok.'
+              : 'Bu kategoride henüz yayınlanmış haber yok.'}
+          </p>
+        ) : (
+          <div className={styles.grid}>
+            {items.map((article) => (
+              <ArticleCard key={article.id} article={article} showDek />
+            ))}
           </div>
         )}
 
-        <Pagination basePath={categoryHref(category.slug)} page={page} pageCount={pageCount} />
+        <Pagination
+          basePath={categoryHref(category.slug)}
+          page={page}
+          pageCount={pageCount}
+          extraParams={subsection ? { dal: subsection } : undefined}
+        />
       </div>
     </>
   );

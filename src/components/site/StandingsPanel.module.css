@@ -1,0 +1,51 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-xs);
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  padding: 0.45rem 0.3rem;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--outline-faint);
+  font-weight: 700;
+  color: var(--fg-muted);
+  text-align: end;
+}
+
+.table td {
+  padding: 0.4rem 0.3rem;
+  border-bottom: 1px solid var(--outline-faint);
+  color: var(--fg-variant);
+  text-align: end;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background: var(--primary-soft);
+}
+
+.rank {
+  width: 2rem;
+  padding-inline-start: 0.75rem !important;
+  text-align: center !important;
+  color: var(--fg-muted);
+}
+
+.team {
+  width: 100%;
+  text-align: start !important;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.points {
+  padding-inline-end: 0.75rem !important;
+  font-weight: 700;
+  color: var(--fg);
+}

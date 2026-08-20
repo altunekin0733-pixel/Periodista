@@ -46,7 +46,6 @@ export function ArticleCard({
         ) : (
           <span className={styles.placeholder} />
         )}
-        {article.breaking && <span className={styles.breakingTag}>Son Dakika</span>}
       </Link>
 
       <div className={styles.body}>

@@ -56,7 +56,6 @@ async function main() {
         icon: category.icon,
         description: category.description,
         position: category.position,
-        logoVariant: category.logoVariant,
       },
     });
   }
@@ -88,7 +87,6 @@ async function main() {
       authorName: article.author,
       status: article.draft ? ArticleStatus.DRAFT : ArticleStatus.PUBLISHED,
       featured: Boolean(article.featured),
-      breaking: Boolean(article.breaking),
       publishedAt: new Date(article.publishedAt),
       readMins,
     };

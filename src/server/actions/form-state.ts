@@ -56,3 +56,10 @@ export type LoginState = {
 };
 
 export const LOGIN_INITIAL_STATE: LoginState = { error: '' };
+
+export type PanelsState = {
+  status: 'idle' | 'error' | 'success';
+  message: string;
+};
+
+export const PANELS_INITIAL_STATE: PanelsState = { status: 'idle', message: '' };

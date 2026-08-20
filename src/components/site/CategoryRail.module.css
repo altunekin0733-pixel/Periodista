@@ -1,0 +1,18 @@
+.rail {
+  display: grid;
+  gap: var(--space-md);
+  padding-block: var(--space-lg);
+}
+
+/* Ana sayfadaki manşet/son dakika satırıyla aynı oran. */
+@media (min-width: 64rem) {
+  .rail {
+    grid-template-columns: 1.65fr 1fr;
+    align-items: stretch;
+  }
+
+  /* Panelin verisi yoksa karusel satırın tamamını kullanır. */
+  .rail:has(> :only-child) {
+    grid-template-columns: 1fr;
+  }
+}

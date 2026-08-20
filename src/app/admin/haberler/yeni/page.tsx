@@ -27,7 +27,6 @@ export default async function NewArticlePage() {
     tags: '',
     status: 'DRAFT',
     featured: false,
-    breaking: false,
     readMins: 0,
     publishedAt: '',
     seoTitle: '',

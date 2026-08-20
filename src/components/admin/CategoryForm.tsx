@@ -18,7 +18,6 @@ export type CategoryFormValues = {
   slug: string;
   icon: string;
   description: string;
-  logoVariant: 'default' | 'sports';
   position: number;
 };
 
@@ -129,39 +128,21 @@ export function CategoryForm({ values }: { values: CategoryFormValues }) {
         />
       </div>
 
-      <div className="admin-row-2">
-        <div className="admin-field">
-          <label htmlFor="category-position" className="admin-label">
-            Sıra
-          </label>
-          <input
-            id="category-position"
-            name="position"
-            type="number"
-            min={0}
-            max={999}
-            required
-            defaultValue={values.position}
-            className="admin-input"
-          />
-          <p className="admin-hint">Menüde küçükten büyüğe sıralanır.</p>
-        </div>
-
-        <div className="admin-field">
-          <label htmlFor="category-logo" className="admin-label">
-            Logo
-          </label>
-          <select
-            id="category-logo"
-            name="logoVariant"
-            defaultValue={values.logoVariant}
-            className="admin-select"
-          >
-            <option value="default">Periodista</option>
-            <option value="sports">Periodista Sports</option>
-          </select>
-          <p className="admin-hint">Bu kategorinin sayfalarında görünecek marka.</p>
-        </div>
+      <div className="admin-field">
+        <label htmlFor="category-position" className="admin-label">
+          Sıra
+        </label>
+        <input
+          id="category-position"
+          name="position"
+          type="number"
+          min={0}
+          max={999}
+          required
+          defaultValue={values.position}
+          className="admin-input"
+        />
+        <p className="admin-hint">Menüde küçükten büyüğe sıralanır.</p>
       </div>
 
       <div className={styles.actions}>

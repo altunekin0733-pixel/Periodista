@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
 import { ArticleCard } from '@/components/site/ArticleCard';
+import { ArticleStream } from '@/components/site/ArticleStream';
 import { CommentSection } from '@/components/site/CommentSection';
 import { ReadingProgress } from '@/components/site/ReadingProgress';
 import { ShareBar } from '@/components/site/ShareBar';
 import { ViewCounter } from '@/components/site/ViewCounter';
+import { embedMediaLinks } from '@/lib/embeds';
 import { formatLongDate, toIsoString } from '@/lib/format';
 import { articleHref, categoryHref, tagHref } from '@/lib/routes';
 import { truncate } from '@/lib/sanitize';
@@ -16,9 +18,14 @@ import { getSettings } from '@/lib/settings';
 import { SITE, absoluteUrl } from '@/lib/site-config';
 import { getArticleBySlug, getRelatedArticles } from '@/server/queries';
 
+import layout from '@/components/site/article-layout.module.css';
+
 import styles from './page.module.css';
 
 export const revalidate = 120;
+
+/** Kesintisiz okuma akışı, adres çubuğunu güncellerken bu bölümü izler. */
+const ARTICLE_ELEMENT_ID = 'haber-govdesi';
 
 type PageProps = {
   params: Promise<{ kategori: string; slug: string }>;
@@ -118,7 +125,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
   return (
     <>
-      <ReadingProgress />
+      <ReadingProgress targetId={ARTICLE_ELEMENT_ID} />
       <ViewCounter articleId={article.id} />
 
       <script
@@ -126,24 +133,24 @@ export default async function ArticlePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <article className={styles.article}>
+      <article id={ARTICLE_ELEMENT_ID} className={layout.article}>
         <nav className={styles.breadcrumb} aria-label="Sayfa yolu">
           <Link href="/">Ana Sayfa</Link>
           <span aria-hidden="true">/</span>
           <Link href={categoryHref(article.category.slug)}>{article.category.name}</Link>
         </nav>
 
-        <header className={styles.header}>
-          <Link href={categoryHref(article.category.slug)} className={styles.categoryChip}>
+        <header className={layout.header}>
+          <Link href={categoryHref(article.category.slug)} className={layout.categoryChip}>
             {article.category.name}
           </Link>
 
-          <h1 className={styles.title}>{article.title}</h1>
+          <h1 className={layout.title}>{article.title}</h1>
 
-          {article.dek && <p className={styles.dek}>{article.dek}</p>}
+          {article.dek && <p className={layout.dek}>{article.dek}</p>}
 
-          <div className={styles.byline}>
-            <span className={styles.author}>{article.authorName}</span>
+          <div className={layout.byline}>
+            <span className={layout.author}>{article.authorName}</span>
             {article.publishedAt && (
               <>
                 <span aria-hidden="true">·</span>
@@ -158,7 +165,7 @@ export default async function ArticlePage({ params }: PageProps) {
         </header>
 
         {article.coverImage && (
-          <figure className={styles.cover}>
+          <figure className={layout.cover}>
             <Image
               src={article.coverImage}
               alt={article.coverAlt || article.title}
@@ -166,22 +173,22 @@ export default async function ArticlePage({ params }: PageProps) {
               height={675}
               priority
               sizes="(max-width: 48rem) 100vw, 760px"
-              className={styles.coverImage}
+              className={layout.coverImage}
             />
-            {article.coverAlt && <figcaption className={styles.caption}>{article.coverAlt}</figcaption>}
+            {article.coverAlt && <figcaption className={layout.caption}>{article.coverAlt}</figcaption>}
           </figure>
         )}
 
         {/* Gövde kaydedilirken sanitize edilir; burada güvenli HTML basılır. */}
         <div
-          className={styles.body}
-          dangerouslySetInnerHTML={{ __html: article.body }}
+          className={layout.body}
+          dangerouslySetInnerHTML={{ __html: embedMediaLinks(article.body) }}
         />
 
         {article.tags.length > 0 && (
-          <nav className={styles.tags} aria-label="Etiketler">
+          <nav className={layout.tags} aria-label="Etiketler">
             {article.tags.map((tag) => (
-              <Link key={tag.slug} href={tagHref(tag.slug)} className={styles.tag}>
+              <Link key={tag.slug} href={tagHref(tag.slug)} className={layout.tag}>
                 #{tag.name}
               </Link>
             ))}
@@ -214,6 +221,19 @@ export default async function ArticlePage({ params }: PageProps) {
           <CommentSection articleId={article.id} moderated={settings.commentsModerated} />
         )}
       </article>
+
+      {/* Okur aşağı kaydırmayı sürdürdükçe sonraki haberler buraya eklenir. */}
+      {article.publishedAt && (
+        <ArticleStream
+          current={{
+            id: article.id,
+            href: articleHref(article.category.slug, article.slug),
+            title: article.title,
+            elementId: ARTICLE_ELEMENT_ID,
+          }}
+          cursor={toIsoString(article.publishedAt)}
+        />
+      )}
     </>
   );
 }

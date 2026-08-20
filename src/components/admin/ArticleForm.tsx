@@ -6,6 +6,7 @@ import { useActionState, useCallback, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { estimateReadingMinutes } from '@/lib/reading-time';
+import { BREAKING_LIMIT } from '@/lib/site-config';
 import { saveArticle } from '@/server/actions/articles';
 import { ARTICLE_INITIAL_STATE } from '@/server/actions/form-state';
 
@@ -26,7 +27,6 @@ export type ArticleFormValues = {
   tags: string;
   status: 'DRAFT' | 'PUBLISHED';
   featured: boolean;
-  breaking: boolean;
   readMins: number;
   /** `datetime-local` girdisi için `YYYY-MM-DDTHH:mm` biçiminde. */
   publishedAt: string;
@@ -159,10 +159,10 @@ export function ArticleForm({ categories, values }: ArticleFormProps) {
             Manşette göster
           </label>
 
-          <label className="admin-checkbox">
-            <input type="checkbox" name="breaking" defaultChecked={values.breaking} />
-            Son dakika şeridine ekle
-          </label>
+          <p className="admin-hint">
+            Son dakika kuyruğu kendiliğinden dolar: yayına alınan her haber şeridin başına
+            geçer, {BREAKING_LIMIT}. sıranın dışında kalan en eski haber düşer.
+          </p>
 
           <div className={styles.actions}>
             <SubmitButton isEdit={isEdit} />

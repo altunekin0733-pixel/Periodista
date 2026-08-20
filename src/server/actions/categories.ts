@@ -15,7 +15,6 @@ const schema = z.object({
   slug: z.string().trim().max(60).optional().or(z.literal('')),
   icon: z.string().trim().min(1).max(60),
   description: z.string().trim().max(240).optional().or(z.literal('')),
-  logoVariant: z.enum(['default', 'sports']),
   position: z.coerce.number().int().min(0).max(999),
 });
 
@@ -81,7 +80,6 @@ export async function saveCategory(
     slug,
     icon: input.icon,
     description: input.description ?? '',
-    logoVariant: input.logoVariant,
     position: input.position,
   };
 

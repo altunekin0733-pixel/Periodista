@@ -31,6 +31,22 @@
   flex: 1;
 }
 
+/*
+ * Panel on beş haber taşır; geniş ekranda manşet karuselinin yanında durduğu
+ * için kendi içinde kayar, satırı aşağı doğru uzatmaz.
+ */
+@media (min-width: 64rem) {
+  .panel {
+    max-height: 27rem;
+  }
+
+  .list {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
 .item {
   position: relative;
   display: flex;

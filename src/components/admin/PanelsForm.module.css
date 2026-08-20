@@ -1,0 +1,15 @@
+.mono {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.spinner {
+  animation: panels-spin 0.9s linear infinite;
+}
+
+@keyframes panels-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

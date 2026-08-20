@@ -8,6 +8,14 @@ import { saveSettings } from '@/lib/settings';
 import { SOCIAL_PLATFORMS } from '@/lib/site-config';
 import type { SettingsState } from './form-state';
 
+const emailOrEmpty = z
+  .string()
+  .trim()
+  .max(160)
+  .refine((value) => value === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value), {
+    message: 'Geçerli bir e-posta adresi girin.',
+  });
+
 const urlOrEmpty = z
   .string()
   .trim()
@@ -38,10 +46,21 @@ export async function updateSettings(
     if (parsed.data) social[platform.key] = parsed.data;
   }
 
+  const contactEmail = emailOrEmpty.safeParse(String(formData.get('contactEmail') ?? ''));
+
+  if (!contactEmail.success) {
+    return { status: 'error', message: contactEmail.error.issues[0]?.message ?? 'E-posta geçersiz.' };
+  }
+
   const payload = {
     tagline: String(formData.get('tagline') ?? ''),
     description: String(formData.get('description') ?? ''),
     social,
+    contactEmail: contactEmail.data,
+    contactAddress: String(formData.get('contactAddress') ?? '').trim(),
+    publisherName: String(formData.get('publisherName') ?? '').trim(),
+    editorInChief: String(formData.get('editorInChief') ?? '').trim(),
+    managingEditor: String(formData.get('managingEditor') ?? '').trim(),
     commentsEnabled: formData.get('commentsEnabled') === 'on',
     commentsModerated: formData.get('commentsModerated') === 'on',
     newsletterEnabled: formData.get('newsletterEnabled') === 'on',

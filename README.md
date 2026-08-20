@@ -46,11 +46,14 @@ eşleşmez — Vercel panelinden girilen haber, Pages'teki siteye yansımaz.
 | Özellik | Açıklama |
 |---|---|
 | Ana sayfa | Otomatik dönen manşet karuseli, son dakika paneli, kategori blokları |
-| Kategori sayfaları | Öne çıkan haber + ızgara, sayfalama, kategoriye özel logo (Spor) |
+| Kategori sayfaları | Kategori karuseli + yan panel, ızgara, sayfalama, dal filtresi |
 | Haber sayfası | Zengin metin gövdesi, kapak görseli, etiketler, okuma ilerleme çubuğu |
+| Kesintisiz okuma | Haber bitince sonraki haberler aşağıda açılır; adres ve okunma sayacı takip eder |
+| Video & podcast | Gövdedeki YouTube, Spotify ve Apple bağlantıları gömülü oynatıcıya döner |
+| Kurumsal sayfalar | Hakkımızda, Künye, İletişim, Reklam Ver, Çerez ve Gizlilik politikaları |
 | Arama | Başlık, spot, gövde metni, yazar ve etiketlerde arama + sayfalama |
 | Etiket sayfaları | Etikete göre haber listesi |
-| Son dakika şeridi | `breaking` işaretli haberler, duraklatılabilir kayan şerit |
+| Son dakika şeridi | En son yayınlanan 15 haber; işaretleme gerekmez, kuyruk kendiliğinden döner |
 | Piyasa şeridi | USD, EUR, GBP, CHF, JPY, gram altın, çeyrek altın, gümüş, BIST 100 — **canlı** |
 | Yorumlar | Ziyaretçi yorumu, editör onayı, bot tuzağı |
 | E-bülten | E-posta toplama, panelden liste kopyalama |
@@ -72,11 +75,13 @@ eşleşmez — Vercel panelinden girilen haber, Pages'teki siteye yansımaz.
 
 - Genel bakış: haber/yorum/abone sayıları, toplam okunma, en çok okunanlar
 - Haber yönetimi: zengin metin editörü (Tiptap), kapak görseli yükleme,
-  etiketler, manşet/son dakika işaretleri, ileri tarihli yayın, SEO alanları
-- Kategori yönetimi: simge seçici, sıralama, kategoriye özel logo
+  etiketler, manşet işareti, ileri tarihli yayın, SEO alanları
+- Kategori yönetimi: simge seçici, sıralama
+- Paneller: Spor puan durumu ve vizyondaki filmler listesi (elle güncellenir)
 - Yorum moderasyonu: onayla / reddet / sil, bekleyen sayısı rozeti
 - Abone listesi
-- Site ayarları: sosyal medya bağlantıları, bölüm aç/kapa anahtarları
+- Site ayarları: künye ve iletişim bilgileri, sosyal medya bağlantıları,
+  bölüm aç/kapa anahtarları
 
 ### Güvenlik
 
@@ -190,6 +195,18 @@ npm run dev
 > derleme anında da erişilebilir olmalıdır. Vercel ortam değişkenlerini derleme
 > aşamasında sağladığı için ek bir şey yapmanız gerekmez.
 
+### Bekleyen migration
+
+`20260820120000_son_dakika_otomatik_tek_logo` kullanılmayan iki sütunu
+(`Article.breaking`, `Category.logoVariant`) düşürür, altbilgi sloganını ve
+Podcast kategorisinin adını günceller. Uygulama bu sütunları zaten okumadığı
+için migration uygulanmadan da çalışır; şemayı eşitlemek ve metin
+güncellemelerini almak için üretim `DATABASE_URL` ile bir kez çalıştırın:
+
+```bash
+npm run db:deploy
+```
+
 ---
 
 ## Ortam değişkenleri
@@ -229,11 +246,11 @@ npm run dev
 ```
 src/
 ├── app/
-│   ├── (site)/                 # ana sayfa, arama, etiket — varsayılan logo
-│   ├── (kategori)/[kategori]/  # kategori ve haber — kategoriye özel logo
+│   ├── (site)/                 # ana sayfa, arama, etiket, kurumsal sayfalar
+│   ├── (kategori)/[kategori]/  # kategori ve haber sayfaları
 │   ├── admin/                  # yönetim paneli
 │   ├── giris/                  # yönetici girişi
-│   ├── api/                    # görsel yükleme, okunma sayacı
+│   ├── api/                    # görsel yükleme, okunma sayacı, okuma akışı
 │   ├── sitemap.ts, robots.ts, rss.xml/, haber-sitemap.xml/
 │   └── layout.tsx              # font, tema önyüklemesi, temel meta
 ├── components/
@@ -248,8 +265,8 @@ src/
 └── proxy.ts                    # /admin koruması
 ```
 
-Kategori sayfalarının ayrı bir route group'ta olmasının nedeni: düzenin
-`params`'a erişip Spor gibi kategorilerde farklı logo gösterebilmesi.
+Kategori sayfaları ayrı bir route group'ta durur; düzen `params`'a erişip
+kategoriye göre karar verebilsin diye ayrılmıştır.
 
 ---
 
@@ -260,15 +277,17 @@ Kategori sayfalarının ayrı bir route group'ta olmasının nedeni: düzenin
 | `/` | Ana sayfa |
 | `/gundem` | Kategori |
 | `/gundem/haber-basligi` | Haber |
+| `/spor?dal=futbol` | Kategori içi dal (etikete göre) |
 | `/etiket/deprem` | Etiket |
 | `/arama?q=...` | Arama |
+| `/hakkimizda`, `/kunye`, `/iletisim`, `/reklam`, `/cerez-politikasi`, `/gizlilik-politikasi` | Kurumsal sayfalar |
 | `/admin` | Yönetim paneli |
 | `/giris` | Yönetici girişi |
 | `/rss.xml`, `/sitemap.xml`, `/haber-sitemap.xml` | Beslemeler |
 
 Kategori adresleri sitenin kökünde olduğu için `admin`, `api`, `arama`,
-`etiket`, `giris` gibi adlar rezervedir; panel bu adlarla kategori
-oluşturulmasını engeller (`src/lib/routes.ts`).
+`etiket`, `giris` ve kurumsal sayfa adları rezervedir; panel bu adlarla
+kategori oluşturulmasını engeller (`src/lib/routes.ts`).
 
 ---
 
@@ -282,6 +301,22 @@ tutulur. Şifre değiştirmek için `npm run admin:hash` ile yeni özet üretip
 kategori ve yazar seçin → kapak görseli yükleyin → durumu *Yayında* yapın →
 kaydedin. Yayınlanan haber ilgili sayfaların önbelleğini tazeler ve anında
 sitede görünür.
+
+**Son dakika:** Ayrı bir işaret yoktur. Yayına alınan her haber şeridin ve ana
+sayfadaki panelin başına geçer; on beşinciden sonrası kendiliğinden düşer
+(`BREAKING_LIMIT`, `src/lib/site-config.ts`).
+
+**Kategori içi dallar:** Spor sayfasındaki Futbol / Voleybol / Basketbol /
+Formula 1 / MotoGP / Takım Sporları / Olimpik Sporlar şeridi etiketlere
+bakar — habere aynı adlı etiketi verdiğinizde o dalın altında listelenir. Üst
+menüye eklenmez. Dal listesi `CATEGORY_SUBSECTIONS` içinde tanımlıdır.
+
+**Paneller:** Spor sayfasındaki puan durumu ve Kültür-Sanat sayfasındaki
+vizyondaki filmler listesi dış servise bağlı değildir; *Paneller* ekranından
+satır satır girilir. Ekonomi sayfasındaki piyasa paneli canlıdır.
+
+**Video ve podcast:** Haber metnine tek başına bir YouTube, Spotify veya Apple
+Podcasts/Music bağlantısı bırakırsanız gömülü oynatıcıya dönüşür.
 
 **Kategori silme:** İçinde haber olan kategori doğrudan silinemez. Önce
 "Haberleri taşı" ile başka bir kategoriye aktarılır, sonra silinir. Bu, tek
@@ -302,6 +337,13 @@ tıkla içerik kaybını önlemek içindir.
   yok; adresler panelden kopyalanıp kullanılır.
 - **Piyasa verisi üçüncü taraf.** Kaynak sırası: Truncgil → TCMB → veri yoksa
   şerit gizlenir. Ticari kullanımda sağlayıcının şartlarını kontrol edin.
+- **Saatlik piyasa grafiği geçmiş biriktikçe dolar.** Kaynak servis yalnızca
+  günlük değişimi veriyor; "son 1 saat" ve seyir çizgisi için sitenin kendi
+  örnekleri kullanılır (15 dakikada bir, `Setting` tablosunda döner tampon).
+  İlk yayından sonraki birkaç saat boyunca grafik yerine "veri birikiyor"
+  yazar.
+- **Puan durumu ve vizyondaki filmler elle girilir.** Bir lig veya film
+  sağlayıcısına bağlanmaz; panelden güncellenmediği sürece eski kalır.
 - **`prisma` paketinde bilinen bir uyarı var** (`@prisma/config` →
   `deepmerge-ts`). Yalnızca CLI/derleme zincirini etkiler, çalışan uygulamaya
   dahil değildir; Prisma tarafından düzeltilince sürüm yükseltilmelidir.

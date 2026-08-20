@@ -174,3 +174,28 @@ ol {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/*
+ * Gömülü video ve ses oynatıcılar. Haber gövdesi `dangerouslySetInnerHTML` ile
+ * basıldığı için sınıf adları modül kapsamına giremez; global tanımlanır.
+ */
+.media-embed {
+  margin-block: var(--space-lg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-high);
+}
+
+.media-embed iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+.media-embed.is-video iframe {
+  aspect-ratio: 16 / 9;
+}
+
+.media-embed.is-audio iframe {
+  height: 11.5rem;
+}

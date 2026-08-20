@@ -30,8 +30,6 @@ model Category {
   description String    @default("")
   /// Menüdeki ve ana sayfadaki sıralama
   position    Int       @default(0)
-  /// Spor kategorisi ayrı logo kullanır — tasarımdaki davranış
-  logoVariant String    @default("default")
   articles    Article[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -56,7 +54,6 @@ model Article {
   tags       Tag[]         @relation("ArticleTags")
   status     ArticleStatus @default(DRAFT)
   featured   Boolean       @default(false)
-  breaking   Boolean       @default(false)
   publishedAt DateTime?
   readMins   Int           @default(3)
   viewCount  Int           @default(0)
@@ -69,7 +66,6 @@ model Article {
   @@index([status, publishedAt(sort: Desc)])
   @@index([categoryId, status, publishedAt(sort: Desc)])
   @@index([featured, status, publishedAt(sort: Desc)])
-  @@index([breaking, status, publishedAt(sort: Desc)])
 }
 
 model Tag {

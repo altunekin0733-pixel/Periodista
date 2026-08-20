@@ -14,5 +14,5 @@ export default async function CategoryLayout({ children, params }: CategoryLayou
 
   if (!category) notFound();
 
-  return <SiteChrome logoVariant={category.logoVariant}>{children}</SiteChrome>;
+  return <SiteChrome>{children}</SiteChrome>;
 }

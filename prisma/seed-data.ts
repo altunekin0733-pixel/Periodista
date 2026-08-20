@@ -4,7 +4,6 @@ export type SeedCategory = {
   icon: string;
   description: string;
   position: number;
-  logoVariant: 'default' | 'sports';
 };
 
 export type SeedArticle = {
@@ -17,7 +16,6 @@ export type SeedArticle = {
   paragraphs: string[];
   tags: string[];
   featured?: boolean;
-  breaking?: boolean;
   draft?: boolean;
 };
 
@@ -28,7 +26,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     icon: 'newspaper',
     description: 'Ülke ve şehir gündeminden öne çıkan gelişmeler.',
     position: 0,
-    logoVariant: 'default',
   },
   {
     slug: 'spor',
@@ -36,7 +33,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     icon: 'sports_soccer',
     description: 'Sahadan sahaya, güncel spor gelişmeleri.',
     position: 1,
-    logoVariant: 'sports',
   },
   {
     slug: 'dunya',
@@ -44,7 +40,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     icon: 'public',
     description: 'Küresel siyaset ve dış politikadan seçmeler.',
     position: 2,
-    logoVariant: 'default',
   },
   {
     slug: 'ekonomi',
@@ -52,7 +47,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     icon: 'trending_up',
     description: 'Piyasalar, para politikası ve iş dünyası.',
     position: 3,
-    logoVariant: 'default',
   },
   {
     slug: 'teknoloji',
@@ -60,7 +54,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     icon: 'memory',
     description: 'Yazılım, donanım ve yapay zekâdan gelişmeler.',
     position: 4,
-    logoVariant: 'default',
   },
   {
     slug: 'kultur-sanat',
@@ -68,7 +61,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     icon: 'theater_comedy',
     description: 'Sahne, sinema ve sanattan öne çıkanlar.',
     position: 5,
-    logoVariant: 'default',
   },
   {
     slug: 'yasam',
@@ -76,15 +68,13 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     icon: 'eco',
     description: 'Şehir hayatı, sağlık ve günlük yaşam.',
     position: 6,
-    logoVariant: 'default',
   },
   {
     slug: 'podcast',
-    name: 'Podcast',
+    name: 'Video Haber & Podcast',
     icon: 'mic',
     description: 'Periodista seslerinden haftalık bölümler.',
     position: 7,
-    logoVariant: 'default',
   },
 ];
 
@@ -98,7 +88,6 @@ export const SEED_ARTICLES: SeedArticle[] = [
     author: 'Elif Kaya',
     publishedAt: '2026-08-18T08:10:00+03:00',
     featured: true,
-    breaking: true,
     tags: ['kentsel dönüşüm', 'deprem', 'e-Devlet'],
     paragraphs: [
       'Bakanlık, kentsel dönüşüm başvurularında dijital sisteme geçildiğini duyurdu. Vatandaşlar e-Devlet üzerinden başvuru durumunu adım adım takip edebilecek.',
@@ -126,7 +115,6 @@ export const SEED_ARTICLES: SeedArticle[] = [
     dek: 'Yeni sezonun ilk haftasında dikkat çeken karşılaşmaları derledik.',
     author: 'Barış Onur',
     publishedAt: '2026-08-18T09:00:00+03:00',
-    breaking: true,
     featured: true,
     tags: ['süper lig', 'futbol'],
     paragraphs: [
@@ -180,7 +168,6 @@ export const SEED_ARTICLES: SeedArticle[] = [
     dek: 'Karar sonrası döviz ve borsa endeksinde hareketlilik gözlendi.',
     author: 'Onur Ateş',
     publishedAt: '2026-08-18T15:00:00+03:00',
-    breaking: true,
     tags: ['merkez bankası', 'faiz', 'piyasalar'],
     paragraphs: [
       'Karar, analistlerin beklentileriyle büyük ölçüde örtüştü. Karar metnindeki ifade değişiklikleri yakından incelendi.',

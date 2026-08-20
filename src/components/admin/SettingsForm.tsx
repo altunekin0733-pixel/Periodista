@@ -119,6 +119,88 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
       </div>
 
       <section className="admin-panel">
+        <p className="admin-panel-title">Künye ve iletişim</p>
+        <p className="admin-hint">
+          Künye, İletişim ve Reklam Ver sayfalarında yayınlanır. Boş bırakılan satır o
+          sayfalarda hiç görünmez.
+        </p>
+
+        <div className="admin-row-2">
+          <div className="admin-field">
+            <label htmlFor="publisherName" className="admin-label">
+              Yayın sahibi
+            </label>
+            <input
+              id="publisherName"
+              name="publisherName"
+              type="text"
+              maxLength={120}
+              defaultValue={settings.publisherName}
+              className="admin-input"
+            />
+          </div>
+
+          <div className="admin-field">
+            <label htmlFor="contactEmail" className="admin-label">
+              İletişim e-postası
+            </label>
+            <input
+              id="contactEmail"
+              name="contactEmail"
+              type="email"
+              maxLength={160}
+              defaultValue={settings.contactEmail}
+              className="admin-input"
+            />
+          </div>
+        </div>
+
+        <div className="admin-row-2">
+          <div className="admin-field">
+            <label htmlFor="editorInChief" className="admin-label">
+              Genel yayın yönetmeni
+            </label>
+            <input
+              id="editorInChief"
+              name="editorInChief"
+              type="text"
+              maxLength={120}
+              defaultValue={settings.editorInChief}
+              className="admin-input"
+            />
+          </div>
+
+          <div className="admin-field">
+            <label htmlFor="managingEditor" className="admin-label">
+              Sorumlu yazı işleri müdürü
+            </label>
+            <input
+              id="managingEditor"
+              name="managingEditor"
+              type="text"
+              maxLength={120}
+              defaultValue={settings.managingEditor}
+              className="admin-input"
+            />
+          </div>
+        </div>
+
+        <div className="admin-field">
+          <label htmlFor="contactAddress" className="admin-label">
+            Adres
+          </label>
+          <textarea
+            id="contactAddress"
+            name="contactAddress"
+            rows={2}
+            maxLength={240}
+            defaultValue={settings.contactAddress}
+            className="admin-textarea"
+          />
+        </div>
+      </section>
+
+      <section className="admin-panel">
         <p className="admin-panel-title">Sosyal medya</p>
         <p className="admin-hint">
           Boş bırakılan platform altbilgide görünmez. Tam adresi yazın.

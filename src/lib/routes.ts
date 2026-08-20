@@ -16,6 +16,13 @@ export const RESERVED_SLUGS = new Set([
   '_next',
   'favicon.ico',
   'opengraph-image',
+  // Altbilgideki kurumsal sayfalar da kök seviyededir.
+  'hakkimizda',
+  'kunye',
+  'iletisim',
+  'reklam',
+  'cerez-politikasi',
+  'gizlilik-politikasi',
 ]);
 
 export function isReservedSlug(slug: string): boolean {
@@ -28,6 +35,13 @@ export function articleHref(categorySlug: string, articleSlug: string): string {
 
 export function categoryHref(slug: string): string {
   return `/${slug}`;
+}
+
+/** Kategori içi dal filtresi: `/spor?dal=futbol` */
+export function subsectionHref(categorySlug: string, subsectionSlug: string | null): string {
+  const base = categoryHref(categorySlug);
+
+  return subsectionSlug ? `${base}?dal=${encodeURIComponent(subsectionSlug)}` : base;
 }
 
 export function tagHref(slug: string): string {

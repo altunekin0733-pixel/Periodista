@@ -7,18 +7,13 @@ import { HeaderActions } from './HeaderActions';
 import { Logo } from './Logo';
 import styles from './SiteHeader.module.css';
 
-type SiteHeaderProps = {
-  /** Spor gibi kendi logosu olan kategorilerde marka değişir. */
-  logoVariant?: string;
-};
-
-export async function SiteHeader({ logoVariant = 'default' }: SiteHeaderProps) {
+export async function SiteHeader() {
   const categories = await getCategories();
 
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Logo variant={logoVariant} height={36} priority />
+        <Logo height={36} priority />
 
         <nav className={styles.nav} aria-label="Kategoriler">
           <ul className={styles.navList}>

@@ -10,6 +10,12 @@ const settingsSchema = z.object({
   tagline: z.string().max(160).default(SITE.tagline),
   description: z.string().max(320).default(SITE.description),
   social: z.record(z.string(), z.string()).default({}),
+  /** Künye ve iletişim sayfalarında yayınlanır; boş bırakılan satır gösterilmez. */
+  contactEmail: z.string().max(160).default(''),
+  contactAddress: z.string().max(240).default(''),
+  publisherName: z.string().max(120).default(''),
+  editorInChief: z.string().max(120).default(''),
+  managingEditor: z.string().max(120).default(''),
   commentsEnabled: z.boolean().default(true),
   /** Yorumlar önce onaya düşsün mü? */
   commentsModerated: z.boolean().default(true),

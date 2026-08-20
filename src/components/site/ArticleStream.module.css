@@ -1,0 +1,47 @@
+.stream {
+  border-top: 1px solid var(--outline-faint);
+}
+
+.eyebrow {
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-caps);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.sentinel {
+  min-height: 4rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: var(--space-lg);
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
+
+.spinner {
+  animation: stream-spin 0.9s linear infinite;
+}
+
+.end {
+  padding: var(--space-lg);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
+
+@keyframes stream-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.titleLink:hover {
+  color: var(--primary);
+}

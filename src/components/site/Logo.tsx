@@ -6,28 +6,23 @@ import { SITE } from '@/lib/site-config';
 import styles from './Logo.module.css';
 
 type LogoProps = {
-  variant?: string;
   height?: number;
   priority?: boolean;
   href?: string | null;
 };
 
 /**
- * Logo tek renklidir; koyu temada CSS `invert` ile beyaza döner. Böylece iki
- * ayrı dosya indirmek yerine tek görsel yeterli olur.
+ * Tek marka, tek dosya. Logo tek renklidir; koyu temada CSS `invert` ile
+ * beyaza döner, böylece ikinci bir görsel indirmeye gerek kalmaz.
  */
-const VARIANTS = {
-  default: { src: '/marka/logo-black.png', width: 1413, height: 277 },
-  sports: { src: '/marka/logo-sports-black.png', width: 1319, height: 423 },
-} as const;
+const ASSET = { src: '/marka/logo-black.png', width: 1413, height: 277 } as const;
 
-export function Logo({ variant = 'default', height = 40, priority = false, href = '/' }: LogoProps) {
-  const asset = VARIANTS[variant as keyof typeof VARIANTS] ?? VARIANTS.default;
-  const width = Math.round((asset.width / asset.height) * height);
+export function Logo({ height = 40, priority = false, href = '/' }: LogoProps) {
+  const width = Math.round((ASSET.width / ASSET.height) * height);
 
   const image = (
     <Image
-      src={asset.src}
+      src={ASSET.src}
       alt={SITE.name}
       width={width}
       height={height}

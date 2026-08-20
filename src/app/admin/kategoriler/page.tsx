@@ -27,7 +27,6 @@ export default async function AdminCategoriesPage({ searchParams }: PageProps) {
       icon: true,
       description: true,
       position: true,
-      logoVariant: true,
       _count: { select: { articles: true } },
     },
   });
@@ -63,7 +62,6 @@ export default async function AdminCategoriesPage({ searchParams }: PageProps) {
                 slug: editing?.slug ?? '',
                 icon: editing?.icon ?? 'newspaper',
                 description: editing?.description ?? '',
-                logoVariant: (editing?.logoVariant as 'default' | 'sports') ?? 'default',
                 position: editing?.position ?? nextPosition,
               }}
             />
